@@ -66,6 +66,11 @@ class _MultiChoiceCardState extends State<MultiChoiceCard> {
               bottomRight: Radius.circular(appPadding * .8),
             ),
             color: primaryColor,
+            image: DecorationImage(
+              image: AssetImage("assets/images/layout/multi_wave.png"),
+              fit: BoxFit.fitHeight,
+              alignment: Alignment.topLeft,
+            ),
           ),
           child: Text(
             widget.data.title,

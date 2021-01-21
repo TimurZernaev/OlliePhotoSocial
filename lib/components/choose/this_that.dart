@@ -16,6 +16,7 @@ class _ThisThatCardState extends State<ThisThatCard> {
   @override
   Widget build(BuildContext context) {
     final data = widget.data;
+    Size size = MediaQuery.of(context).size;
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -106,19 +107,32 @@ class _ThisThatCardState extends State<ThisThatCard> {
             children: [
               Container(
                 margin: EdgeInsets.only(bottom: appPadding / 3),
+                height: size.height / 3,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Column(
                     children: [
-                      Image(
-                        fit: BoxFit.cover,
-                        image: AssetImage(
-                            'assets/images/data/' + data.imageUrls[0]),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          width: double.infinity,
+                          child: Image(
+                            fit: BoxFit.cover,
+                            image: AssetImage(
+                                'assets/images/data/' + data.imageUrls[0]),
+                          ),
+                        ),
                       ),
-                      Image(
-                        fit: BoxFit.cover,
-                        image: AssetImage(
-                            'assets/images/data/' + data.imageUrls[1]),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          width: double.infinity,
+                          child: Image(
+                            fit: BoxFit.cover,
+                            image: AssetImage(
+                                'assets/images/data/' + data.imageUrls[1]),
+                          ),
+                        ),
                       ),
                     ],
                   ),

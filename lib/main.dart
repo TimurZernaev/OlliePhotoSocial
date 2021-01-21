@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/pages/home.dart';
-import 'package:ollie_photo_social/pages/polling.dart';
+
+import 'components/animated_splash.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(OllieApp());
 }
 
-class MyApp extends StatelessWidget {
+class OllieApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,7 +17,12 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       debugShowCheckedModeBanner: false,
-      home: HomePage(title: 'Ollie Social Home'),
+      home: AnimatedSplash(
+        imagePath: 'assets/images/layout/splash.png',
+        home: HomePage(title: 'Ollie Social Home'),
+        duration: 800,
+        type: AnimatedSplashType.StaticDuration,
+      ),
     );
   }
 }
