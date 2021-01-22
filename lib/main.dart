@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/pages/home.dart';
+import 'package:ollie_photo_social/pages/signin.dart';
 
 import 'components/animated_splash.dart';
 
@@ -15,11 +16,13 @@ class OllieApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        fontFamily: 'Gotham',
       ),
       debugShowCheckedModeBanner: false,
       home: AnimatedSplash(
         imagePath: 'assets/images/layout/splash.png',
-        home: HomePage(title: 'Ollie Social Home'),
+        home: SigninPage(),
+        // home: HomePage(title: 'Ollie Social Home'),
         duration: 800,
         type: AnimatedSplashType.StaticDuration,
       ),

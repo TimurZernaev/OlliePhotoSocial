@@ -13,6 +13,7 @@ const Color primaryGrdStopColor = Color.fromRGBO(110, 58, 134, 1);
 const Color primaryColor = Color.fromRGBO(121, 77, 141, 1.0);
 const Color primaryDarkColor = Color.fromRGBO(90, 57, 105, 1.0);
 const Color primaryTransColor = Color.fromRGBO(121, 77, 141, .8);
+const Color primaryTrans2Color = Color.fromRGBO(121, 77, 141, .3);
 const Color grayColor = Color.fromRGBO(236, 236, 236, 1.0);
 const Color gray2Color = Color.fromRGBO(228, 228, 228, 1.0);
 const Color gray3Color = Color.fromRGBO(144, 144, 144, 1.0);

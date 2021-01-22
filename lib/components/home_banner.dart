@@ -11,7 +11,8 @@ class _HomeBannerState extends State<HomeBanner> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 10, bottom: 0),
+      padding: EdgeInsets.only(
+          top: appPadding / 3, bottom: 0, left: appPadding, right: appPadding),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.max,

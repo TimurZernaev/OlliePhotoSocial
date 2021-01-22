@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 class BottomNextIcon extends StatelessWidget {
-  const BottomNextIcon({Key key, this.complete, this.nextAction})
+  const BottomNextIcon({Key key, this.complete, this.nextAction, this.primary})
       : super(key: key);
   final bool complete;
   final void Function() nextAction;
+  final bool primary;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    bool _primary = primary == null ? false : primary;
 
     return Container(
       alignment: Alignment.bottomRight,
@@ -25,7 +27,9 @@ class BottomNextIcon extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage("assets/images/layout/bottom_back.png"),
+                      image: AssetImage(_primary
+                          ? "assets/images/layout/bottom_back_primary.png"
+                          : "assets/images/layout/bottom_back.png"),
                       fit: BoxFit.cover),
                 ),
                 alignment: Alignment.center,
@@ -35,7 +39,7 @@ class BottomNextIcon extends StatelessWidget {
                   (this.complete == null || !this.complete)
                       ? Icons.arrow_forward
                       : Icons.check,
-                  color: Colors.black,
+                  color: _primary ? Colors.white : Colors.black,
                   size: 32,
                 ),
               ),

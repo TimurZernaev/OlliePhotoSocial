@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/components/bottom_next.dart';
+import 'package:ollie_photo_social/components/responsive_scaffold.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/components/polling_back_icon.dart';
 import 'package:ollie_photo_social/pages/polling_yes.dart';
@@ -40,8 +41,8 @@ class _SetPollingYesPageState extends State<SetPollingYesPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: Stack(
+    return ResponsiveScaffold(
+      child: Stack(
         alignment: Alignment.topCenter,
         children: [
           Container(

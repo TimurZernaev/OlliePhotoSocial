@@ -4,6 +4,8 @@ import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/model/multi.dart';
 import 'package:ollie_photo_social/model/this_that.dart';
 
+import '../block_raised_button.dart';
+
 class MultiChoiceCard extends StatefulWidget {
   final MultiChoice data;
   MultiChoiceCard({Key key, @required this.data}) : super(key: key);
@@ -120,7 +122,12 @@ class _MultiChoiceCardState extends State<MultiChoiceCard> {
           Container(
             child: Column(children: _buildChoiceList()),
           ),
-          SizedBox(
+          BlockRaisedButton(
+            label: 'Send Answer',
+            color: yellowColor,
+            textColor: white,
+          ),
+          /* SizedBox(
             width: double.infinity,
             child: ButtonTheme(
               child: RaisedButton(
@@ -140,7 +147,7 @@ class _MultiChoiceCardState extends State<MultiChoiceCard> {
                 ),
               ),
             ),
-          ),
+          ), */
         ],
       ),
     );

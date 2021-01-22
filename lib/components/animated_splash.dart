@@ -81,15 +81,17 @@ class _AnimatedSplashState extends State<AnimatedSplash>
             Navigator.of(context).pushReplacement(
                 CupertinoPageRoute(builder: (BuildContext context) => _home));
           });
-
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
       body: FadeTransition(
         opacity: _animation,
         child: Container(
+          width: size.width,
+          height: size.height,
           child: Image.asset(
             _imagePath,
-            fit: BoxFit.cover,
+            fit: BoxFit.fill,
           ),
         ),
       ),

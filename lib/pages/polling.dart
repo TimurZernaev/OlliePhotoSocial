@@ -67,33 +67,31 @@ class _PollingPageState extends State<PollingPage> {
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      color: white,
-                      padding: EdgeInsets.only(
-                          left: size.height / 7 + appPadding / 2, right: 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(bottom: appPadding / 4),
-                            child: Text(
-                              title,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
+                  SizedBox(width: size.height / 7 + appPadding / 2),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
                           ),
-                          Text(subtitle,
-                              style: TextStyle(color: Colors.grey.shade500)),
-                        ],
-                      ),
+                        ),
+                        SizedBox(height: appPadding / 3),
+                        Text(
+                          subtitle,
+                          style: TextStyle(color: Colors.grey.shade500),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
                   ),
+                  SizedBox(width: appPadding / 3),
                 ],
               ),
             ),
@@ -157,12 +155,13 @@ class _PollingPageState extends State<PollingPage> {
                   "Choose Your Pooling",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 24,
+                    fontSize: 22,
                     color: white,
                   ),
                 ),
+                SizedBox(height: appPadding / 2),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildPollingCard(
                       0,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ollie_photo_social/components/bottom_menu.dart';
 import 'package:ollie_photo_social/components/dash_line.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/mock_data/user_data.dart';
@@ -241,6 +242,7 @@ class _OffersPageState extends State<OffersPage> {
               ],
             ),
           ),
+          BottomNavBar(),
         ],
       ),
     );

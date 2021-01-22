@@ -62,9 +62,7 @@ class _HomePageState extends State<HomePage> {
                     fit: BoxFit.cover,
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: appPadding, vertical: 20),
-                    // child: Container(
+                    padding: EdgeInsets.symmetric(vertical: appPadding),
                     child: Column(
                       children: [
                         HomeBanner(),
@@ -74,7 +72,6 @@ class _HomePageState extends State<HomePage> {
                         ), */
                       ],
                     ),
-                    // ),
                   ),
                 ],
               ),

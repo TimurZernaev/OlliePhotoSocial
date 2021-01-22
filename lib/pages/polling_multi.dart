@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/components/bottom_next.dart';
+import 'package:ollie_photo_social/components/responsive_scaffold.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/components/polling_back_icon.dart';
 import 'package:ollie_photo_social/pages/share.dart';
@@ -13,6 +14,7 @@ class PollingMultiPage extends StatefulWidget {
 
 class _PollingMultiPageState extends State<PollingMultiPage> {
   String dropdownValue = '1 hour';
+  int optionsLength = 2;
 
   void nextAction() {
     Navigator.push(
@@ -23,16 +25,58 @@ class _PollingMultiPageState extends State<PollingMultiPage> {
     );
   }
 
+  void addOption() {
+    setState(() {
+      optionsLength++;
+    });
+  }
+
+  Widget _buildOptionsList() {
+    List<Widget> options = [];
+    for (var i = 0; i < optionsLength; i++) {
+      options.add(_buildOptionItem(i));
+    }
+    return Column(children: options);
+  }
+
+  Widget _buildOptionItem(int idx) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Option ${idx + 1}', style: TextStyle(color: white)),
+          SizedBox(height: appPadding / 4),
+          TextField(
+            textAlign: TextAlign.left,
+            decoration: new InputDecoration(
+                hintText: 'Answer question ${idx + 1}',
+                border: new OutlineInputBorder(
+                  borderRadius: const BorderRadius.all(
+                    const Radius.circular(8),
+                  ),
+                  borderSide: new BorderSide(
+                    color: primaryColor,
+                    width: 1.0,
+                  ),
+                ),
+                fillColor: white,
+                filled: true),
+          ),
+          SizedBox(height: appPadding * 2 / 3),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: Stack(
+    return ResponsiveScaffold(
+      child: Stack(
         alignment: Alignment.topCenter,
         children: [
           Container(
             width: size.width,
-            height: size.height,
             child: Image(
               image: AssetImage('assets/images/layout/new_polling_topbar.png'),
               fit: BoxFit.cover,
@@ -48,7 +92,7 @@ class _PollingMultiPageState extends State<PollingMultiPage> {
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.all(appPadding),
-                    margin: EdgeInsets.only(top: appPadding),
+                    // margin: EdgeInsets.only(top: appPadding),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.max,
@@ -76,46 +120,14 @@ class _PollingMultiPageState extends State<PollingMultiPage> {
                                     filled: true),
                               ),
                               SizedBox(height: appPadding),
-                              Text('Option 1', style: TextStyle(color: white)),
-                              SizedBox(height: appPadding / 4),
-                              TextField(
-                                textAlign: TextAlign.left,
-                                decoration: new InputDecoration(
-                                    hintText: 'Answer question 1',
-                                    border: new OutlineInputBorder(
-                                      borderRadius: const BorderRadius.all(
-                                        const Radius.circular(8),
-                                      ),
-                                      borderSide: new BorderSide(
-                                        color: primaryColor,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    fillColor: white,
-                                    filled: true),
+                              _buildOptionsList(),
+                              InkWell(
+                                onTap: () => addOption(),
+                                child: Text(
+                                  '+ Add Option',
+                                  style: TextStyle(color: Colors.yellow),
+                                ),
                               ),
-                              SizedBox(height: appPadding * 2 / 3),
-                              Text('Option 2', style: TextStyle(color: white)),
-                              SizedBox(height: appPadding / 4),
-                              TextField(
-                                textAlign: TextAlign.left,
-                                decoration: new InputDecoration(
-                                    hintText: 'Answer question 2',
-                                    border: new OutlineInputBorder(
-                                      borderRadius: const BorderRadius.all(
-                                        const Radius.circular(8),
-                                      ),
-                                      borderSide: new BorderSide(
-                                        color: primaryColor,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    fillColor: white,
-                                    filled: true),
-                              ),
-                              SizedBox(height: appPadding * 2 / 3),
-                              Text('+ Add Option',
-                                  style: TextStyle(color: Colors.yellow)),
                               SizedBox(height: appPadding),
                               Text('Polling Duration',
                                   style: TextStyle(color: white)),

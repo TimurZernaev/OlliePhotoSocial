@@ -25,7 +25,7 @@ class _UserAvatarListState extends State<UserAvatarList> {
         );
       },
       child: Container(
-        padding: EdgeInsets.only(right: appPadding / 4),
+        padding: EdgeInsets.only(left: appPadding / 4),
         margin: EdgeInsets.only(top: index % 2 == 0 ? 40 : 0),
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: appPadding / 8),
@@ -37,8 +37,8 @@ class _UserAvatarListState extends State<UserAvatarList> {
                   alignment: Alignment.topLeft,
                   children: <Widget>[
                     Container(
-                      height: 56,
-                      width: 56,
+                      height: 62,
+                      width: 62,
                       decoration: BoxDecoration(
                         border: Border.all(
                             color: Colors.white,
@@ -57,7 +57,7 @@ class _UserAvatarListState extends State<UserAvatarList> {
                     ),
                     if (userList[index].online)
                       Container(
-                        margin: EdgeInsets.only(top: 45, left: 42),
+                        margin: EdgeInsets.only(top: 50, left: 48),
                         height: 9,
                         width: 9,
                         decoration: BoxDecoration(
@@ -67,6 +67,7 @@ class _UserAvatarListState extends State<UserAvatarList> {
                       )
                   ],
                 ),
+                SizedBox(height: appPadding / 6),
                 Text(
                   userList[index].name.split(' ')[0],
                   style: TextStyle(color: white),
@@ -82,8 +83,6 @@ class _UserAvatarListState extends State<UserAvatarList> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return Container(
       margin: EdgeInsets.symmetric(vertical: appPadding / 3),
       height: 120,
