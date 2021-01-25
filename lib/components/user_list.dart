@@ -26,7 +26,7 @@ class _UserAvatarListState extends State<UserAvatarList> {
       },
       child: Container(
         padding: EdgeInsets.only(left: appPadding / 4),
-        margin: EdgeInsets.only(top: index % 2 == 0 ? 40 : 0),
+        margin: EdgeInsets.only(top: index % 2 == 0 ? 30 : 0),
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: appPadding / 8),
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),

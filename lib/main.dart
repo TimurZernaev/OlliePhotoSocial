@@ -16,7 +16,7 @@ class OllieApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        fontFamily: 'Gotham',
+        // fontFamily: 'Gotham',
       ),
       debugShowCheckedModeBanner: false,
       home: AnimatedSplash(

@@ -61,7 +61,7 @@ class _SearchPageState extends State<SearchPage> {
                         user.name,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          fontSize: 16,
                         ),
                       ),
                       SizedBox(height: appPadding / 4),

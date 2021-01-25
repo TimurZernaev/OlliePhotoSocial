@@ -79,27 +79,35 @@ class _HomePageState extends State<HomePage> {
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: appPadding / 3),
                   margin: EdgeInsets.only(bottom: appPadding / 2),
-                  child: StaggeredGridView.countBuilder(
-                    primary: false,
-                    crossAxisCount: 4,
-                    mainAxisSpacing: appPadding / 3,
-                    crossAxisSpacing: appPadding / 6,
-                    itemCount: yesNoList.length + thisThatList.length,
-                    itemBuilder: (context, index) => _buildPollItem(index),
-                    staggeredTileBuilder: (index) => new StaggeredTile.fit(2),
+                  child: MediaQuery.removePadding(
+                    context: context,
+                    removeTop: true,
+                    child: StaggeredGridView.countBuilder(
+                      primary: false,
+                      crossAxisCount: 4,
+                      mainAxisSpacing: appPadding / 3,
+                      crossAxisSpacing: appPadding / 6,
+                      itemCount: yesNoList.length + thisThatList.length,
+                      itemBuilder: (context, index) => _buildPollItem(index),
+                      staggeredTileBuilder: (index) => new StaggeredTile.fit(2),
+                    ),
                   ),
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemCount: multiList.length,
-                  itemBuilder: (context, index) {
-                    return _buildMultiItem(index);
-                  },
+                child: MediaQuery.removePadding(
+                  context: context,
+                  removeTop: true,
+                  child: ListView.builder(
+                    physics: BouncingScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    itemCount: multiList.length,
+                    itemBuilder: (context, index) {
+                      return _buildMultiItem(index);
+                    },
+                  ),
                 ),
-              )
+              ),
             ],
           ),
           BottomNavBar(),
