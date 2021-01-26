@@ -14,7 +14,7 @@ class SetPollingThisPage extends StatefulWidget {
     this.thatImage,
   }) : super(key: key);
 
-  final String thisImage, thatImage;
+  final List<String> thisImage, thatImage;
 
   @override
   _SetPollingThisPageState createState() => _SetPollingThisPageState();
@@ -22,12 +22,38 @@ class SetPollingThisPage extends StatefulWidget {
 
 class _SetPollingThisPageState extends State<SetPollingThisPage> {
   String dropdownValue = '1 hour';
+  PageController _thisController, _thatController;
+
+  @override
+  void initState() {
+    _thisController = PageController();
+    _thatController = PageController();
+    super.initState();
+  }
 
   void nextAction() {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => SharePage(),
+      ),
+    );
+  }
+
+  List<Widget> _buildCarousel(Size size, bool isThis) {
+    List photos = isThis ? widget.thisImage : widget.thatImage;
+    return List.generate(
+        photos.length, (index) => _buildPage(size, photos[index]));
+  }
+
+  Widget _buildPage(Size size, String path) {
+    return Container(
+      width: size.width,
+      height: size.height * .4,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(appPadding * 2 / 3),
+        image: DecorationImage(
+            image: Image.file(File(path)).image, fit: BoxFit.cover),
       ),
     );
   }
@@ -69,6 +95,14 @@ class _SetPollingThisPageState extends State<SetPollingThisPage> {
                               child: Container(
                                 width: size.width,
                                 height: size.height * .4,
+                                child: PageView(
+                                  children: _buildCarousel(size, true),
+                                  controller: _thisController,
+                                ),
+                              ),
+                              /* Container(
+                                width: size.width,
+                                height: size.height * .4,
                                 decoration: BoxDecoration(
                                   borderRadius:
                                       BorderRadius.circular(appPadding * 2 / 3),
@@ -77,10 +111,17 @@ class _SetPollingThisPageState extends State<SetPollingThisPage> {
                                           .image,
                                       fit: BoxFit.cover),
                                 ),
-                              ),
+                              ), */
                             ),
                             Expanded(
                               child: Container(
+                                width: size.width,
+                                height: size.height * .4,
+                                child: PageView(
+                                  children: _buildCarousel(size, false),
+                                  controller: _thatController,
+                                ),
+                              ), /* Container(
                                 width: size.width,
                                 height: size.height * .4,
                                 decoration: BoxDecoration(
@@ -91,7 +132,7 @@ class _SetPollingThisPageState extends State<SetPollingThisPage> {
                                           .image,
                                       fit: BoxFit.cover),
                                 ),
-                              ),
+                              ), */
                             ),
                           ],
                         ),

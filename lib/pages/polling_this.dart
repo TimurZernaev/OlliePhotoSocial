@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/components/bottom_next.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/components/polling_back_icon.dart';
+import 'package:ollie_photo_social/constants.dart';
 import 'dart:math' as math;
 import 'package:camera/camera.dart';
 import 'package:ollie_photo_social/pages/gallery.dart';
@@ -18,13 +19,18 @@ class PollingThisPage extends StatefulWidget {
     Key key,
     this.thisThat,
     this.imagePath,
-    this.thisImage,
-    this.thatImage,
+    this.thisPhotos,
+    this.thatPhotos,
+    this.selectedThisIndex,
+    this.selectedThatIndex,
+    this.createMode,
   }) : super(key: key);
 
   final bool thisThat;
   final String imagePath;
-  final String thisImage, thatImage;
+  final List<String> thisPhotos, thatPhotos;
+  final int selectedThisIndex, selectedThatIndex;
+  final bool createMode;
 
   @override
   _PollingThisPageState createState() => _PollingThisPageState();
@@ -37,47 +43,77 @@ class _PollingThisPageState extends State<PollingThisPage> {
   bool frontCamera;
   bool thisSelected = true;
   String thisImagePath, thatImagePath;
+  List<String> thisPhotosPath = [], thatPhotosPath = [];
+  bool noCamera = false;
+  bool createMode;
+  int selectedThisIndex = 0, selectedThatIndex = 0;
 
   @override
   void initState() {
-    if (widget.thisThat != null && widget.imagePath != null) {
-      String galleryImg = widget.imagePath;
-      setState(() {
-        thisImagePath = widget.thisThat ? galleryImg : widget.thisImage;
-        thatImagePath = widget.thisThat ? widget.thatImage : galleryImg;
-      });
-    }
     super.initState();
     getCameras();
+    if (widget.thisThat != null && widget.createMode != null) {
+      setState(() {
+        thisPhotosPath = widget.thisPhotos;
+        thatPhotosPath = widget.thatPhotos;
+        thisSelected = widget.thisThat;
+        createMode = null;
+        selectedThisIndex = widget.createMode && widget.thisThat
+            ? widget.thisPhotos.length - 1
+            : widget.selectedThisIndex;
+        selectedThatIndex = widget.createMode && !widget.thisThat
+            ? widget.thatPhotos.length - 1
+            : widget.selectedThatIndex;
+      });
+    }
   }
 
   @override
   void dispose() {
-    // Dispose of the controller when the widget is disposed.
     _controller.dispose();
     super.dispose();
   }
 
   void getCameras() async {
     cameras = await availableCameras();
-    setState(() {
-      frontCamera = true;
-      _controller = CameraController(
-        cameras[frontCamera ? 0 : 1],
-        ResolutionPreset.ultraHigh,
-      );
-      _initializeControllerFuture = _controller.initialize();
-    });
+    _initCamera(false);
   }
 
   void _switchCamera() {
+    _initCamera(true);
+  }
+
+  Future wait() async {
+    return new Future.delayed(const Duration(milliseconds: 300), () => {});
+  }
+
+  bool thisPhotosEmpty() {
+    return thisPhotosPath == null || thisPhotosPath.isEmpty;
+  }
+
+  bool thatPhotosEmpty() {
+    return thatPhotosPath == null || thatPhotosPath.isEmpty;
+  }
+
+  void _initCamera(bool turn) {
     setState(() {
-      frontCamera = !frontCamera;
-      _controller = CameraController(
-        cameras[frontCamera ? 0 : 1],
-        ResolutionPreset.ultraHigh,
-      );
-      _initializeControllerFuture = _controller.initialize();
+      if (cameras.length == 0)
+        noCamera = true;
+      else
+        noCamera = false;
+
+      if (turn)
+        frontCamera = !frontCamera;
+      else
+        frontCamera = true;
+      if (cameras.length != 0) {
+        _controller = CameraController(
+          cameras.length > 0 ? cameras[frontCamera ? 0 : 1] : null,
+          ResolutionPreset.ultraHigh,
+        );
+      }
+      _initializeControllerFuture =
+          cameras.length == 0 ? wait() : _controller.initialize();
     });
   }
 
@@ -86,8 +122,8 @@ class _PollingThisPageState extends State<PollingThisPage> {
       context,
       MaterialPageRoute(
         builder: (context) => SetPollingThisPage(
-          thisImage: thisImagePath,
-          thatImage: thatImagePath,
+          thisImage: thisPhotosPath,
+          thatImage: thatPhotosPath,
         ),
       ),
     );
@@ -97,28 +133,20 @@ class _PollingThisPageState extends State<PollingThisPage> {
     try {
       await _initializeControllerFuture;
       XFile picture = await _controller.takePicture();
+      String imgPath = picture.path;
       setState(() {
-        if (thisSelected)
-          thisImagePath = picture.path;
-        else
-          thatImagePath = picture.path;
+        if (createMode == null || createMode) {
+          if (thisSelected)
+            thisPhotosPath.add(imgPath);
+          else
+            thisPhotosPath.add(imgPath);
+        } else {
+          if (thisSelected)
+            thisPhotosPath[selectedThisIndex] = imgPath;
+          else
+            thatPhotosPath[selectedThatIndex] = imgPath;
+        }
       });
-
-      if (thisImagePath != null &&
-          thatImagePath != null &&
-          thisImagePath.isNotEmpty &&
-          thatImagePath.isNotEmpty) print('next step');
-      /* Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SelectedPhotosPage(
-              selectedIndex: widget.selectedIndex,
-              imagePath: picture.path,
-              createMode: widget.createMode,
-              photosPath: widget.photosPath,
-            ),
-          ),
-        ); */
     } catch (e) {
       print(e);
     }
@@ -130,10 +158,14 @@ class _PollingThisPageState extends State<PollingThisPage> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => GalleryPage(
-            thisThatPage: true,
-            isThis: thisSelected == null || thisSelected,
-            thisImage: thisImagePath,
-            thatImage: thatImagePath),
+          thisThatPage: true,
+          isThis: thisSelected == null || thisSelected,
+          thisPhotosPath: thisPhotosPath,
+          thatPhotosPath: thatPhotosPath,
+          createMode: createMode,
+          selectedThisIndex: selectedThisIndex,
+          selectedThatIndex: selectedThatIndex,
+        ),
       ),
     );
   }
@@ -141,6 +173,8 @@ class _PollingThisPageState extends State<PollingThisPage> {
   void _selectPreviewer(bool isThis) {
     setState(() {
       thisSelected = isThis;
+      createMode =
+          (isThis ? thisPhotosEmpty() : thatPhotosEmpty()) ? true : false;
     });
   }
 
@@ -153,12 +187,114 @@ class _PollingThisPageState extends State<PollingThisPage> {
     });
   }
 
-  Widget _buildPhotoSelector(bool isThis) {
-    bool completed = (thisImagePath != null &&
-        thatImagePath != null &&
-        thisImagePath.isNotEmpty &&
-        thatImagePath.isNotEmpty);
-    bool selectorShow = !completed && thisSelected == isThis;
+  void _changePhoto(bool isThis, int idx) {
+    setState(() {
+      thisSelected = isThis;
+      if (isThis)
+        selectedThisIndex = idx;
+      else
+        selectedThatIndex = idx;
+      createMode = false;
+    });
+  }
+
+  void _removePhoto(bool isThis, int idx) {
+    setState(() {
+      if (isThis)
+        selectedThisIndex = 0;
+      else
+        selectedThatIndex = 0;
+
+      if (isThis) {
+        // if (thisPhotosPath.length == 1) selectedThisIndex = -1;
+        thisPhotosPath.removeAt(idx);
+      } else {
+        // if (thatPhotosPath.length == 1) selectedThatIndex = -1;
+        thatPhotosPath.removeAt(idx);
+      }
+    });
+  }
+
+  void _addPhoto(bool isThis) {
+    List<String> photos = isThis ? thisPhotosPath : thatPhotosPath;
+    if (photos != null && photos.length >= 4) return;
+    setState(() {
+      thisSelected = isThis;
+      createMode = true;
+    });
+  }
+
+  List<Widget> _buildPhotoList(bool isThis) {
+    List<String> photos = isThis ? thisPhotosPath : thatPhotosPath;
+    if (photos == null || photos.isEmpty) return [SizedBox(height: 30)];
+    return List.generate(photos.length, (idx) => _buildPhotoItem(isThis, idx));
+  }
+
+  Widget _buildAddPhotoBtn(bool isThis) {
+    return InkWell(
+        onTap: () => _addPhoto(isThis),
+        child: Container(
+          width: 32,
+          height: 32,
+          margin: EdgeInsets.only(bottom: appPadding / 2),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.yellow,
+          ),
+          alignment: Alignment.center,
+          child: Icon(
+            Icons.add,
+            color: black,
+            size: 32,
+          ),
+        ));
+  }
+
+  Widget _buildPhotoItem(bool isThis, int index) {
+    List<String> photos = isThis ? thisPhotosPath : thatPhotosPath;
+    return Stack(
+      alignment: AlignmentDirectional.topEnd,
+      children: [
+        InkWell(
+          onTap: () => _changePhoto(isThis, index),
+          child: Container(
+            margin: EdgeInsets.only(top: appPadding / 3, right: appPadding / 4),
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 3,
+                color: white,
+              ),
+              image: DecorationImage(
+                image: Image.file(File(photos[index])).image,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+        InkWell(
+          onTap: () => _removePhoto(isThis, index),
+          child: Container(
+            width: appPadding * 2 / 3,
+            height: appPadding * 2 / 3,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: white,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(Icons.close, color: black, size: appPadding / 2),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPhotoBrowser(bool isThis) {
+    bool emptyPhotos =
+        isThis == thisSelected ? thisPhotosEmpty() : thatPhotosEmpty();
+    bool selectorShow =
+        (createMode != null || emptyPhotos) && isThis == thisSelected;
     return selectorShow
         ? Container(
             padding: EdgeInsets.all(appPadding * 1.5),
@@ -167,7 +303,7 @@ class _PollingThisPageState extends State<PollingThisPage> {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GestureDetector(
+                InkWell(
                   onTap: () => _openGallery(),
                   child: Container(
                     width: appPadding,
@@ -183,8 +319,8 @@ class _PollingThisPageState extends State<PollingThisPage> {
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () => _takePicture(),
+                InkWell(
+                  onTap: () => noCamera ? {} : _takePicture(),
                   child: Container(
                     alignment: Alignment.center,
                     width: appPadding * 1.6,
@@ -202,31 +338,46 @@ class _PollingThisPageState extends State<PollingThisPage> {
                         color: primaryColor,
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(Icons.stop, color: white, size: 20),
+                      child: Icon(Icons.stop,
+                          color: noCamera ? gray3Color : white, size: 20),
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () => _switchCamera(),
+                InkWell(
+                  onTap: () => noCamera ? {} : _switchCamera(),
                   child: Transform.rotate(
                     angle: math.pi / 4,
                     child: Icon(
                       Icons.autorenew,
                       size: 40,
-                      color: white,
+                      color: noCamera ? gray3Color : white,
                     ),
                   ),
                 ),
               ],
             ),
           )
-        : Container();
+        : Container(
+            padding: EdgeInsets.all(appPadding),
+            margin: EdgeInsets.only(top: appPadding * 3),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                _buildAddPhotoBtn(isThis),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: _buildPhotoList(isThis),
+                ),
+              ],
+            ));
   }
 
   Widget _buildPhotoPreviewer(BuildContext context, snapshot, bool isThis) {
     Size size = MediaQuery.of(context).size;
-    String imagePath = isThis ? thisImagePath : thatImagePath;
-    bool noImage = imagePath == null || imagePath.isEmpty;
+    List<String> imagePaths = isThis ? thisPhotosPath : thatPhotosPath;
+    bool noImage = imagePaths == null || imagePaths.isEmpty;
     bool cameraShow = noImage &&
         isThis == thisSelected &&
         snapshot.connectionState == ConnectionState.done;
@@ -236,14 +387,21 @@ class _PollingThisPageState extends State<PollingThisPage> {
         child: Container(
           width: size.width / 2,
           height: size.height,
-          color: Color.fromRGBO(0, 0, 0, 0.8),
+          decoration: BoxDecoration(
+            border: Border(
+              right: BorderSide(color: gray2Color, width: .4),
+            ),
+            color: Color.fromRGBO(0, 0, 0, 0.8),
+          ),
           child: !noImage
               ? Stack(children: [
                   Container(
                     color: red,
                     height: size.height,
                     child: Image(
-                      image: Image.file(File(imagePath)).image,
+                      image: Image.file(File(imagePaths[
+                              isThis ? selectedThisIndex : selectedThatIndex]))
+                          .image,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -261,7 +419,14 @@ class _PollingThisPageState extends State<PollingThisPage> {
                   ),
                 ])
               : (cameraShow
-                  ? CameraPreview(_controller)
+                  ? (noCamera
+                      ? Center(
+                          child: Text(
+                            "No Cameras.",
+                            style: TextStyle(color: white, fontSize: 20),
+                          ),
+                        )
+                      : CameraPreview(_controller))
                   : Center(
                       // child: CircularProgressIndicator(),
                       )),
@@ -271,10 +436,10 @@ class _PollingThisPageState extends State<PollingThisPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    bool completed = (thisImagePath != null &&
-        thatImagePath != null &&
-        thisImagePath.isNotEmpty &&
-        thatImagePath.isNotEmpty);
+    bool completed = (thisPhotosPath != null &&
+        thatPhotosPath != null &&
+        !thisPhotosPath.isEmpty &&
+        !thatPhotosPath.isEmpty);
     return Scaffold(
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
@@ -288,7 +453,7 @@ class _PollingThisPageState extends State<PollingThisPage> {
                       alignment: Alignment.bottomCenter,
                       children: [
                         _buildPhotoPreviewer(context, snapshot, true),
-                        _buildPhotoSelector(true),
+                        _buildPhotoBrowser(true),
                       ],
                     ),
                   ),
@@ -297,7 +462,7 @@ class _PollingThisPageState extends State<PollingThisPage> {
                       alignment: Alignment.bottomCenter,
                       children: [
                         _buildPhotoPreviewer(context, snapshot, false),
-                        _buildPhotoSelector(false),
+                        _buildPhotoBrowser(false),
                       ],
                     ),
                   ),

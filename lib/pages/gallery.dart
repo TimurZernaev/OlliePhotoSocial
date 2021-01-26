@@ -11,17 +11,21 @@ class GalleryPage extends StatefulWidget {
   GalleryPage({
     Key key,
     this.selectedIndex,
+    this.selectedThisIndex,
+    this.selectedThatIndex,
     this.createMode,
     this.photosPath,
     this.thisThatPage,
     this.isThis,
     this.thisImage,
     this.thatImage,
+    this.thisPhotosPath,
+    this.thatPhotosPath,
   }) : super(key: key);
 
-  final int selectedIndex;
+  final int selectedIndex, selectedThisIndex, selectedThatIndex;
   final bool createMode;
-  final List<String> photosPath;
+  final List<String> photosPath, thisPhotosPath, thatPhotosPath;
   final bool thisThatPage;
   final bool isThis;
   final String thisImage, thatImage;
@@ -54,13 +58,30 @@ class _GalleryState extends State<GalleryPage> {
         createMode: widget.createMode,
         photosPath: widget.photosPath,
       );
-    else
+    else {
+      List thisPhotos = widget.thisPhotosPath;
+      List thatPhotos = widget.thatPhotosPath;
+      if (widget.createMode == null || widget.createMode) {
+        if (widget.isThis)
+          thisPhotos.add(assetFile.path);
+        else
+          thatPhotos.add(assetFile.path);
+      } else {
+        if (widget.isThis)
+          thisPhotos[widget.selectedThisIndex] = assetFile.path;
+        else
+          thatPhotos[widget.selectedThatIndex] = assetFile.path;
+      }
       routeWidget = PollingThisPage(
         thisThat: widget.isThis,
-        imagePath: assetFile.path,
-        thisImage: widget.thisImage,
-        thatImage: widget.thatImage,
+        createMode: widget.createMode == null || widget.createMode,
+        selectedThisIndex: widget.selectedThisIndex,
+        selectedThatIndex: widget.selectedThatIndex,
+        thisPhotos: thisPhotos,
+        thatPhotos: thatPhotos,
       );
+    }
+
     Navigator.push(
       context,
       MaterialPageRoute(

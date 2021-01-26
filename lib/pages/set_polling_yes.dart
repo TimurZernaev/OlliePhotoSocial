@@ -47,9 +47,8 @@ class _SetPollingYesPageState extends State<SetPollingYesPage> {
   }
 
   List<Widget> _buildCarousel(Size size) {
-    List<Widget> items = List.generate(
+    return List.generate(
         widget.photosPath.length, (index) => _buildPage(size, index));
-    return items;
   }
 
   Widget _buildPage(Size size, int idx) {

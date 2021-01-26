@@ -71,7 +71,7 @@ class _SelectedPhotosPageState extends State<SelectedPhotosPage> {
       child: Stack(
         alignment: AlignmentDirectional.topEnd,
         children: [
-          GestureDetector(
+          InkWell(
             onTap: () => _changePhoto(index),
             child: Container(
               margin:
@@ -90,7 +90,7 @@ class _SelectedPhotosPageState extends State<SelectedPhotosPage> {
               ),
             ),
           ),
-          GestureDetector(
+          InkWell(
             onTap: () => _removePhoto(index),
             child: Container(
               width: appPadding * 2 / 3,
@@ -180,7 +180,7 @@ class _SelectedPhotosPageState extends State<SelectedPhotosPage> {
                 SizedBox(
                   width: size.width / 8,
                   height: size.width / 8,
-                  child: GestureDetector(
+                  child: InkWell(
                     onTap: () => _addPhoto(),
                     child: Container(
                       decoration: BoxDecoration(
