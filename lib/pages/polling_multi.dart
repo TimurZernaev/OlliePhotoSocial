@@ -27,7 +27,7 @@ class _PollingMultiPageState extends State<PollingMultiPage> {
 
   void addOption() {
     setState(() {
-      optionsLength++;
+      if (optionsLength < 4) optionsLength++;
     });
   }
 
@@ -77,6 +77,7 @@ class _PollingMultiPageState extends State<PollingMultiPage> {
         children: [
           Container(
             width: size.width,
+            height: size.height,
             child: Image(
               image: AssetImage('assets/images/layout/new_polling_topbar.png'),
               fit: BoxFit.cover,
