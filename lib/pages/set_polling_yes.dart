@@ -7,6 +7,7 @@ import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/components/polling_back_icon.dart';
 import 'package:ollie_photo_social/pages/polling_yes.dart';
 import 'package:ollie_photo_social/pages/share.dart';
+import 'package:scrolling_page_indicator/scrolling_page_indicator.dart';
 
 class SetPollingYesPage extends StatefulWidget {
   SetPollingYesPage({
@@ -28,12 +29,38 @@ class SetPollingYesPage extends StatefulWidget {
 
 class _SetPollingYesPageState extends State<SetPollingYesPage> {
   String dropdownValue = '1 hour';
+  PageController _controller;
+
+  @override
+  void initState() {
+    _controller = PageController();
+    super.initState();
+  }
 
   void nextAction() {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => SharePage(),
+      ),
+    );
+  }
+
+  List<Widget> _buildCarousel(Size size) {
+    List<Widget> items = List.generate(
+        widget.photosPath.length, (index) => _buildPage(size, index));
+    return items;
+  }
+
+  Widget _buildPage(Size size, int idx) {
+    return Container(
+      width: size.width,
+      height: size.height * .4,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(appPadding * 2 / 3),
+        image: DecorationImage(
+            image: Image.file(File(widget.photosPath[idx])).image,
+            fit: BoxFit.cover),
       ),
     );
   }
@@ -72,13 +99,9 @@ class _SetPollingYesPageState extends State<SetPollingYesPage> {
                         Container(
                           width: size.width,
                           height: size.height * .4,
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.circular(appPadding * 2 / 3),
-                            image: DecorationImage(
-                                image: Image.file(File(widget.photosPath[0]))
-                                    .image,
-                                fit: BoxFit.cover),
+                          child: PageView(
+                            children: _buildCarousel(size),
+                            controller: _controller,
                           ),
                         ),
                         SizedBox(height: appPadding),

@@ -30,6 +30,7 @@ class _PollingYesPageState extends State<PollingYesPage> {
   Future<void> _initializeControllerFuture;
   List<CameraDescription> cameras;
   bool frontCamera;
+  bool noCamera = false;
 
   @override
   void initState() {
@@ -46,24 +47,36 @@ class _PollingYesPageState extends State<PollingYesPage> {
 
   void getCameras() async {
     cameras = await availableCameras();
-    setState(() {
-      frontCamera = true;
-      _controller = CameraController(
-        cameras[frontCamera ? 0 : 1],
-        ResolutionPreset.ultraHigh,
-      );
-      _initializeControllerFuture = _controller.initialize();
-    });
+    _initCamera(false);
   }
 
   void _switchCamera() {
+    _initCamera(true);
+  }
+
+  Future wait() async {
+    return new Future.delayed(const Duration(milliseconds: 300), () => {});
+  }
+
+  void _initCamera(bool turn) {
     setState(() {
-      frontCamera = !frontCamera;
-      _controller = CameraController(
-        cameras[frontCamera ? 0 : 1],
-        ResolutionPreset.ultraHigh,
-      );
-      _initializeControllerFuture = _controller.initialize();
+      if (cameras.length == 0)
+        noCamera = true;
+      else
+        noCamera = false;
+
+      if (turn)
+        frontCamera = !frontCamera;
+      else
+        frontCamera = true;
+      if (cameras.length != 0) {
+        _controller = CameraController(
+          cameras.length > 0 ? cameras[frontCamera ? 0 : 1] : null,
+          ResolutionPreset.ultraHigh,
+        );
+      }
+      _initializeControllerFuture =
+          cameras.length == 0 ? wait() : _controller.initialize();
     });
   }
 
@@ -115,12 +128,21 @@ class _PollingYesPageState extends State<PollingYesPage> {
               Container(
                 width: size.width,
                 height: size.height,
-                color: (snapshot.connectionState == ConnectionState.done)
+                color: (snapshot.connectionState == ConnectionState.done &&
+                        !noCamera)
                     ? Colors.transparent
                     : Color.fromRGBO(0, 0, 0, 0.8),
-                child: (snapshot.connectionState == ConnectionState.done)
+                child: (snapshot.connectionState == ConnectionState.done &&
+                        !noCamera)
                     ? CameraPreview(_controller)
-                    : Center(child: CircularProgressIndicator()),
+                    : !noCamera
+                        ? Center(child: CircularProgressIndicator())
+                        : Center(
+                            child: Text(
+                              "There's no camera.",
+                              style: TextStyle(color: white, fontSize: 20),
+                            ),
+                          ),
               ),
               Container(
                 padding: EdgeInsets.all(appPadding * 1.5),
@@ -147,7 +169,9 @@ class _PollingYesPageState extends State<PollingYesPage> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => _takePicture(),
+                      onTap: () => noCamera
+                          ? {print('cannot take picture')}
+                          : _takePicture(),
                       child: Container(
                         alignment: Alignment.center,
                         width: 68,
@@ -169,14 +193,15 @@ class _PollingYesPageState extends State<PollingYesPage> {
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () => _switchCamera(),
+                    InkWell(
+                      onTap: () =>
+                          noCamera ? {print('cannot switch')} : _switchCamera(),
                       child: Transform.rotate(
                         angle: math.pi / 4,
                         child: Icon(
                           Icons.autorenew,
                           size: 40,
-                          color: white,
+                          color: noCamera ? gray3Color : white,
                         ),
                       ),
                     ),
