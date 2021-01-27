@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/components/bottom_next.dart';
 import 'package:ollie_photo_social/components/dialog_box.dart';
 import 'package:ollie_photo_social/constants.dart';
-import 'package:ollie_photo_social/model/action_button.dart';
-import 'package:ollie_photo_social/pages/polling.dart';
 
 class PollingCompletePage extends StatefulWidget {
   PollingCompletePage({Key key}) : super(key: key);

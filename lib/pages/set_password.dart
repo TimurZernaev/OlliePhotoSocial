@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/components/block_raised_button.dart';
 import 'package:ollie_photo_social/components/responsive_scaffold.dart';
 import 'package:ollie_photo_social/constants.dart';
-import 'package:ollie_photo_social/pages/signup.dart';
 import 'package:ollie_photo_social/pages/on_boarding.dart';
 
 class SetNewPasswordPage extends StatefulWidget {

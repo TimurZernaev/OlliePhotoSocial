@@ -1,5 +1,4 @@
 import 'package:ollie_photo_social/model/multi.dart';
-import 'package:ollie_photo_social/model/yes_no.dart';
 import 'package:ollie_photo_social/mock_data/user_data.dart';
 
 final List<MultiChoice> multiList = [

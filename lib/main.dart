@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ollie_photo_social/pages/home.dart';
 import 'package:ollie_photo_social/pages/signin.dart';
 
 import 'components/animated_splash.dart';

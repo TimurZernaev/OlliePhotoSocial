@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/components/bottom_menu.dart';
 import 'package:ollie_photo_social/components/user_list.dart';
-import 'package:ollie_photo_social/components/categories.dart';
 import 'package:ollie_photo_social/components/home_banner.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/mock_data/yes_no_data.dart';

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ollie_photo_social/components/block_raised_button.dart';
 import 'package:ollie_photo_social/components/round_checkbox.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/model/multi.dart';
-import 'package:ollie_photo_social/model/this_that.dart';
-
-import '../block_raised_button.dart';
 
 class MultiChoiceCard extends StatefulWidget {
   final MultiChoice data;
@@ -105,8 +103,6 @@ class _MultiChoiceCardState extends State<MultiChoiceCard> {
 
   @override
   Widget build(BuildContext context) {
-    final data = widget.data;
-
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: appPadding,

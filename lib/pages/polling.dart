@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/components/bottom_menu.dart';
-import 'package:ollie_photo_social/components/status_dialog.dart';
 import 'package:ollie_photo_social/constants.dart';
-import 'package:ollie_photo_social/model/action_button.dart';
 import 'package:ollie_photo_social/pages/polling_multi.dart';
 import 'package:ollie_photo_social/pages/polling_this.dart';
 import 'package:ollie_photo_social/pages/polling_yes.dart';

@@ -4,7 +4,6 @@ import 'package:ollie_photo_social/components/digital_code_field.dart';
 import 'package:ollie_photo_social/components/responsive_scaffold.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/pages/set_password.dart';
-import 'package:ollie_photo_social/pages/signup.dart';
 
 class VerificationPage extends StatefulWidget {
   VerificationPage({Key key, this.title}) : super(key: key);

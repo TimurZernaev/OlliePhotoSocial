@@ -3,16 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/components/bottom_next.dart';
 import 'package:ollie_photo_social/constants.dart';
-import 'package:ollie_photo_social/components/polling_back_icon.dart';
-import 'package:ollie_photo_social/constants.dart';
 import 'dart:math' as math;
 import 'package:camera/camera.dart';
 import 'package:ollie_photo_social/pages/gallery.dart';
-import 'package:ollie_photo_social/pages/selected_photo.dart';
 import 'package:ollie_photo_social/pages/set_polling_this.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:path/path.dart' show join;
-import 'package:path_provider/path_provider.dart';
 
 class PollingThisPage extends StatefulWidget {
   PollingThisPage({
@@ -435,11 +430,10 @@ class _PollingThisPageState extends State<PollingThisPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     bool completed = (thisPhotosPath != null &&
         thatPhotosPath != null &&
-        !thisPhotosPath.isEmpty &&
-        !thatPhotosPath.isEmpty);
+        thisPhotosPath.isNotEmpty &&
+        thatPhotosPath.isNotEmpty);
     return Scaffold(
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,

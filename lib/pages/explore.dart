@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ollie_photo_social/components/block_raised_button.dart';
 import 'package:ollie_photo_social/components/bottom_next.dart';
-import 'package:ollie_photo_social/components/rounded_raised_button.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/pages/home.dart';
-import 'package:ollie_photo_social/pages/signup.dart';
 
 class ExplorePage extends StatefulWidget {
   ExplorePage({Key key, this.title}) : super(key: key);

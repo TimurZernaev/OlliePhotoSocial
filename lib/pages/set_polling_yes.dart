@@ -5,9 +5,7 @@ import 'package:ollie_photo_social/components/bottom_next.dart';
 import 'package:ollie_photo_social/components/responsive_scaffold.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/components/polling_back_icon.dart';
-import 'package:ollie_photo_social/pages/polling_yes.dart';
 import 'package:ollie_photo_social/pages/share.dart';
-import 'package:scrolling_page_indicator/scrolling_page_indicator.dart';
 
 class SetPollingYesPage extends StatefulWidget {
   SetPollingYesPage({

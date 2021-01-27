@@ -3,7 +3,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:ollie_photo_social/components/bottom_menu.dart';
 import 'package:ollie_photo_social/components/choose/multi_choice.dart';
 import 'package:ollie_photo_social/components/user_list.dart';
-import 'package:ollie_photo_social/components/categories.dart';
 import 'package:ollie_photo_social/components/home_banner.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/mock_data/multi_data.dart';

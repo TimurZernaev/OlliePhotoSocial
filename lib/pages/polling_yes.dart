@@ -1,13 +1,10 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/constants.dart';
-import 'package:ollie_photo_social/components/polling_back_icon.dart';
-import 'dart:math' as math;
 import 'package:camera/camera.dart';
 import 'package:ollie_photo_social/pages/gallery.dart';
 import 'package:ollie_photo_social/pages/selected_photo.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:path/path.dart' show join;
-import 'package:path_provider/path_provider.dart';
 
 class PollingYesPage extends StatefulWidget {
   PollingYesPage({
