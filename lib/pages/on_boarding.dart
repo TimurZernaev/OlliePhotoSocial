@@ -3,6 +3,7 @@ import 'package:ollie_photo_social/components/block_raised_button.dart';
 import 'package:ollie_photo_social/components/bottom_next.dart';
 import 'package:ollie_photo_social/components/rounded_raised_button.dart';
 import 'package:ollie_photo_social/constants.dart';
+import 'package:ollie_photo_social/pages/explore.dart';
 import 'package:ollie_photo_social/pages/home.dart';
 import 'package:ollie_photo_social/pages/signup.dart';
 
@@ -251,7 +252,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => HomePage(),
+        builder: (context) => ExplorePage(),
       ),
     );
   }
