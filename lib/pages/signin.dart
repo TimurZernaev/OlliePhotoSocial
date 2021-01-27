@@ -36,7 +36,7 @@ class _SigninPageState extends State<SigninPage> {
   }
 
   void runSignin() {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => HomePage(),

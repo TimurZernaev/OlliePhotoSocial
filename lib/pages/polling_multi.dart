@@ -122,13 +122,15 @@ class _PollingMultiPageState extends State<PollingMultiPage> {
                               ),
                               SizedBox(height: appPadding),
                               _buildOptionsList(),
-                              InkWell(
-                                onTap: () => addOption(),
-                                child: Text(
-                                  '+ Add Option',
-                                  style: TextStyle(color: Colors.yellow),
-                                ),
-                              ),
+                              optionsLength < 4
+                                  ? InkWell(
+                                      onTap: () => addOption(),
+                                      child: Text(
+                                        '+ Add Option',
+                                        style: TextStyle(color: Colors.yellow),
+                                      ),
+                                    )
+                                  : SizedBox(height: 1),
                               SizedBox(height: appPadding),
                               Text('Polling Duration',
                                   style: TextStyle(color: white)),
