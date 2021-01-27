@@ -40,7 +40,8 @@ class PollingBackIcon extends StatelessWidget {
               Text(
                 (title == null) ? '' : title,
                 style: TextStyle(
-                    color: white, fontWeight: FontWeight.bold, fontSize: 24),
+                    color: white,
+                    /* fontWeight: FontWeight.bold, */ fontSize: 22),
               )
             ],
           )

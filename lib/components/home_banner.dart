@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/constants.dart';
+import 'package:ollie_photo_social/mock_data/user_data.dart';
+import 'package:ollie_photo_social/pages/profile.dart';
 import 'package:ollie_photo_social/pages/search.dart';
 
 class HomeBanner extends StatefulWidget {
@@ -8,6 +10,15 @@ class HomeBanner extends StatefulWidget {
 }
 
 class _HomeBannerState extends State<HomeBanner> {
+  void goProfilePage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfilePage(user: userList[1]),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,19 +32,22 @@ class _HomeBannerState extends State<HomeBanner> {
           Stack(
             alignment: Alignment.topCenter,
             children: <Widget>[
-              Container(
-                height: 32,
-                width: 32,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Colors.white,
-                      width: 2.0,
-                      style: BorderStyle.solid),
-                  color: Colors.black,
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/avatar/user1.jpeg"),
-                    fit: BoxFit.fitWidth,
+              InkWell(
+                onTap: () => goProfilePage(),
+                child: Container(
+                  height: 32,
+                  width: 32,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Colors.white,
+                        width: 2.0,
+                        style: BorderStyle.solid),
+                    color: Colors.black,
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: AssetImage("assets/images/avatar/user1.jpeg"),
+                      fit: BoxFit.fitWidth,
+                    ),
                   ),
                 ),
               ),

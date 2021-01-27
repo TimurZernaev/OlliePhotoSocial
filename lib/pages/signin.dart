@@ -47,7 +47,6 @@ class _SigninPageState extends State<SigninPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    print('height: ${size.height}');
     return ResponsiveScaffold(
       child: Stack(
         alignment: Alignment.topCenter,

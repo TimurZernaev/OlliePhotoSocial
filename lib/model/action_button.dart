@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
+
 class ActionButton {
   String text;
   bool filled;
-  void Function() action;
+  Function() action;
 
   ActionButton({this.text, this.action, this.filled});
 }

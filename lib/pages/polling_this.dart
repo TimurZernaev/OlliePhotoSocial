@@ -129,19 +129,19 @@ class _PollingThisPageState extends State<PollingThisPage> {
     );
   }
 
-  void _takePicture() async {
+  void _takePicture(bool isThis) async {
     try {
       await _initializeControllerFuture;
       XFile picture = await _controller.takePicture();
       String imgPath = picture.path;
       setState(() {
         if (createMode == null || createMode) {
-          if (thisSelected)
+          if (isThis)
             thisPhotosPath.add(imgPath);
           else
             thisPhotosPath.add(imgPath);
         } else {
-          if (thisSelected)
+          if (isThis)
             thisPhotosPath[selectedThisIndex] = imgPath;
           else
             thatPhotosPath[selectedThatIndex] = imgPath;
@@ -320,7 +320,7 @@ class _PollingThisPageState extends State<PollingThisPage> {
                   ),
                 ),
                 InkWell(
-                  onTap: () => noCamera ? {} : _takePicture(),
+                  onTap: () => noCamera ? {} : _takePicture(isThis),
                   child: Container(
                     alignment: Alignment.center,
                     width: appPadding * 1.6,

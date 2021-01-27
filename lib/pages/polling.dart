@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/components/bottom_menu.dart';
+import 'package:ollie_photo_social/components/status_dialog.dart';
 import 'package:ollie_photo_social/constants.dart';
+import 'package:ollie_photo_social/model/action_button.dart';
 import 'package:ollie_photo_social/pages/polling_multi.dart';
 import 'package:ollie_photo_social/pages/polling_this.dart';
 import 'package:ollie_photo_social/pages/polling_yes.dart';
@@ -189,15 +191,6 @@ class _PollingPageState extends State<PollingPage> {
           BottomNavBar(
             isPolling: true,
           ),
-          /* StatusDialog(
-            title: 'Block User',
-            message: 'Do you want to block this user',
-            state: ActionState.blocked,
-            buttons: [
-              ActionButton(text: 'No', filled: false),
-              ActionButton(text: 'yes'),
-            ],
-          ) */
         ],
       ),
     );
