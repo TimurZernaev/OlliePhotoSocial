@@ -8,6 +8,7 @@ class BlockRaisedButton extends StatelessWidget {
   final Color color;
   final double fontSize;
   final Function action;
+  final Color borderColor;
 
   BlockRaisedButton({
     Key key,
@@ -16,6 +17,7 @@ class BlockRaisedButton extends StatelessWidget {
     this.textColor,
     this.color,
     this.fontSize,
+    this.borderColor,
   }) : super(key: key);
 
   @override
@@ -23,6 +25,8 @@ class BlockRaisedButton extends StatelessWidget {
     var color = this.color == null ? primaryColor : this.color;
     var textColor = this.textColor == null ? white : this.textColor;
     var fontSize = this.fontSize == null ? 18.0 : this.fontSize;
+    var borderColor =
+        this.borderColor == null ? Colors.transparent : this.borderColor;
 
     return SizedBox(
       width: double.infinity,
@@ -33,9 +37,7 @@ class BlockRaisedButton extends StatelessWidget {
             color: color,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(appPadding / 3),
-              side: BorderSide(
-                color: color,
-              ),
+              side: BorderSide(color: borderColor, width: 2),
             ),
             padding: EdgeInsets.symmetric(
               vertical: appPadding * 2 / 3,

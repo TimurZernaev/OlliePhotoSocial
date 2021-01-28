@@ -6,6 +6,7 @@ final List<User> userList = [
     name: 'Fransisca Dandra',
     online: false,
     followers: 13008,
+    blocked: true,
   ),
   User(
     imageUrl: 'user2.jpeg',

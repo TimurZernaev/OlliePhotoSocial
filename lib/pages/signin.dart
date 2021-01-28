@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/components/block_raised_button.dart';
 import 'package:ollie_photo_social/components/responsive_scaffold.dart';
 import 'package:ollie_photo_social/constants.dart';
+import 'package:ollie_photo_social/pages/admin/home.dart';
 import 'package:ollie_photo_social/pages/home.dart';
 import 'package:ollie_photo_social/pages/signup.dart';
 
@@ -17,6 +18,8 @@ class SigninPage extends StatefulWidget {
 }
 
 class _SigninPageState extends State<SigninPage> {
+  String username = '', password = '';
+
   void goSignUp() {
     Navigator.push(
       context,
@@ -39,7 +42,8 @@ class _SigninPageState extends State<SigninPage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => HomePage(),
+        builder: (context) =>
+            (username == 'admin') ? AdminHomePage() : HomePage(),
       ),
     );
   }
@@ -119,6 +123,9 @@ class _SigninPageState extends State<SigninPage> {
                       color: white,
                     ),
                   ),
+                  onChanged: (text) => setState(() {
+                    username = text;
+                  }),
                   style: TextStyle(color: white),
                 ),
                 SizedBox(
