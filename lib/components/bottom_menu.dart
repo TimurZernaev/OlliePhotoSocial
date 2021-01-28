@@ -48,6 +48,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
           child: Container(
             width: size.width,
             height: 80,
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                color: black.withOpacity(0.18),
+                blurRadius: 46,
+                offset: Offset(2, 2),
+              ),
+            ]),
             child: Stack(
               overflow: Overflow.visible,
               children: [
@@ -122,12 +129,11 @@ class _CustomPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     Path path = Path();
-    path.moveTo(0, 40); // Start
-    path.quadraticBezierTo(size.width * 0.5, 0, size.width, 40);
+    path.moveTo(0, 50); // Start
+    path.quadraticBezierTo(size.width * 0.5, 0, size.width, 50);
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
-    path.lineTo(0, 40);
-    canvas.drawShadow(path, Colors.black, 10, true);
+    path.lineTo(0, 50);
     canvas.drawPath(path, paint);
   }
 

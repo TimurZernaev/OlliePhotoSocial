@@ -32,7 +32,7 @@ class BlockRaisedButton extends StatelessWidget {
       width: double.infinity,
       child: ButtonTheme(
         child: CustomElevation(
-          child: RaisedButton(
+          child: FlatButton(
             textColor: textColor,
             color: color,
             shape: RoundedRectangleBorder(

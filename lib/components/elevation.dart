@@ -9,15 +9,13 @@ class CustomElevation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: black.withOpacity(0.2),
-            blurRadius: 46,
-            offset: Offset(4, 4),
-          ),
-        ],
-      ),
+      decoration: BoxDecoration(boxShadow: [
+        BoxShadow(
+          color: black.withOpacity(0.2),
+          blurRadius: 46,
+          offset: Offset(4, 4),
+        ),
+      ], color: Colors.transparent),
       child: this.child,
     );
   }
