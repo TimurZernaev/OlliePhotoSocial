@@ -164,7 +164,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       ],
       [
         RoundedRaisedButton(label: 'Arabic', filled: false),
-        SizedBox(width: appPadding / 2),
+        SizedBox(width: appPadding),
         RoundedRaisedButton(label: 'English'),
       ],
     ];
@@ -216,38 +216,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
             child: SizedBox(height: 1),
           ),
           _buildStepTitle(stepTitles[step][0], stepTitles[step][1]),
-          /* Padding(
-            padding: EdgeInsets.symmetric(horizontal: appPadding * 1.5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  stepTitles[step][0],
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: appPadding / 2),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: appPadding * 1.5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  stepTitles[step][1],
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 36,
-                    color: primaryColor,
-                  ),
-                ),
-              ],
-            ),
-          ), */
           SizedBox(height: appPadding * 2),
         ],
       ),

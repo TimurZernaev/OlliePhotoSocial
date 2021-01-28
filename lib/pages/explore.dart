@@ -17,14 +17,14 @@ class _ExplorePageState extends State<ExplorePage> {
 
   Widget _buildInterestStep(Size size) {
     List interests = [
-      ["Women Bags", 0.05, 0.05, .9],
-      ["Hats", .4, .06, .45],
-      ["Electronics", .65, .05, .72],
-      ["Watches", .32, .23, 1.0],
-      ["Cars", .72, .28, .5],
-      ["Wallets", 0.06, .33, .72],
-      ["Comics", .42, .5, .55],
-      ["Jewellery", .63, .42, 1.0],
+      ["Women Bags", 0.07, 0.06, .7],
+      ["Hats", .48, .06, .3],
+      ["Electronics", .73, .05, .55],
+      ["Watches", .37, .21, .8],
+      ["Cars", .8, .28, .35],
+      ["Wallets", 0.06, .35, .55],
+      ["Comics", .42, .5, .3],
+      ["Jewellery", .65, .45, .8],
     ];
     return Expanded(
       child: Column(
@@ -44,6 +44,7 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 
   Widget _buildCategoryItem(List interest, Size size) {
+    final catImage = '${interest[0].toString().toLowerCase()}.png';
     return Positioned(
       left: size.width * interest[1],
       top: size.height * .83 * interest[2],
@@ -52,13 +53,22 @@ class _ExplorePageState extends State<ExplorePage> {
           children: [
             InkWell(
               onTap: () => print('${interest[0]}'),
-              child: Image(
-                image: AssetImage(
-                    "assets/images/icon/${interest[0].toString().toLowerCase()}.png"),
+              child: Container(
+                decoration: BoxDecoration(
+                  /* border: Border.all(
+                    color: interestedCats[index]
+                        ? yellowColor
+                        : Colors.transparent,
+                    width: 3,
+                  ), */
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/icon/${catImage}"),
+                    fit: BoxFit.fill,
+                  ),
+                ),
                 width: 150 * interest[3],
-                height: 150 * interest[3] * .9,
-                fit: BoxFit.fitWidth,
-                alignment: Alignment.topLeft,
+                height: 150 * interest[3],
               ),
             ),
             Text(
