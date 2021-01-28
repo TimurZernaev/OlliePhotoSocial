@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/model/this_that.dart';
+import 'package:ollie_photo_social/pages/polling_this_detail.dart';
 
 class ThisThatCard extends StatefulWidget {
   final ThisThat data;
@@ -13,6 +14,15 @@ class ThisThatCard extends StatefulWidget {
 class _ThisThatCardState extends State<ThisThatCard> {
   int currentIndex = 0;
 
+  void goPollingThisDetailPage(ThisThat data) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PollingThisDetailPage(data: data),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final data = widget.data;
@@ -23,9 +33,6 @@ class _ThisThatCardState extends State<ThisThatCard> {
         vertical: appPadding / 3,
         horizontal: appPadding / 2,
       ),
-      /* decoration: BoxDecoration(
-        border: Border.all(color: black.withOpacity(0.4)),
-      ), */
       child: Column(
         children: [
           Container(
@@ -82,25 +89,21 @@ class _ThisThatCardState extends State<ThisThatCard> {
               ],
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(
-              bottom: appPadding / 4,
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    data.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+          SizedBox(height: appPadding / 4),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  data.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           Stack(
             alignment: AlignmentDirectional.centerEnd,
@@ -108,33 +111,36 @@ class _ThisThatCardState extends State<ThisThatCard> {
               Container(
                 margin: EdgeInsets.only(bottom: appPadding / 3),
                 height: size.height / 3,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          width: double.infinity,
-                          child: Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                                'assets/images/data/' + data.imageUrls[0]),
+                child: InkWell(
+                  onTap: () => goPollingThisDetailPage(data),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            width: double.infinity,
+                            child: Image(
+                              fit: BoxFit.cover,
+                              image: AssetImage('assets/images/data/' +
+                                  data.thisImageUrls[0]),
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          width: double.infinity,
-                          child: Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                                'assets/images/data/' + data.imageUrls[1]),
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            width: double.infinity,
+                            child: Image(
+                              fit: BoxFit.cover,
+                              image: AssetImage('assets/images/data/' +
+                                  data.thatImageUrls[0]),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

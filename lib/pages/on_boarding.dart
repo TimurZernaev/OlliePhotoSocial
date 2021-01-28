@@ -15,6 +15,13 @@ class OnboardingPage extends StatefulWidget {
 
 class _OnboardingPageState extends State<OnboardingPage> {
   int step = 0;
+  List<bool> interestedCats = List.generate(8, (index) => false);
+
+  void setInterestCats(int idx) {
+    setState(() {
+      interestedCats[idx] = !interestedCats[idx];
+    });
+  }
 
   List<Widget> _buildStepIcon() {
     List<Widget> stepIcon = [];
@@ -51,7 +58,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             child: Stack(
               children: List.generate(
                 interests.length,
-                (index) => _buildCategoryItem(interests[index], size),
+                (index) => _buildCategoryItem(interests[index], index, size),
               ),
             ),
           ),
@@ -62,7 +69,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     );
   }
 
-  Widget _buildCategoryItem(List interest, Size size) {
+  Widget _buildCategoryItem(List interest, int index, Size size) {
     return Positioned(
       left: size.width * interest[1],
       top: size.height * .83 * interest[2],
@@ -70,14 +77,23 @@ class _OnboardingPageState extends State<OnboardingPage> {
         child: Column(
           children: [
             InkWell(
-              onTap: () => print('${interest[0]}'),
-              child: Image(
-                image: AssetImage(
-                    "assets/images/icon/${interest[0].toString().toLowerCase()}.png"),
+              onTap: () => setInterestCats(index),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: interestedCats[index]
+                        ? yellowColor
+                        : Colors.transparent,
+                    width: 3,
+                  ),
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      image: AssetImage(
+                          "assets/images/icon/${interest[0].toString().toLowerCase()}.png"),
+                      fit: BoxFit.fill),
+                ),
                 width: 150 * interest[3],
-                height: 150 * interest[3] * .9,
-                fit: BoxFit.fitWidth,
-                alignment: Alignment.topLeft,
+                height: 150 * interest[3],
               ),
             ),
             Text(

@@ -48,19 +48,7 @@ class _PollingMultiPageState extends State<PollingMultiPage> {
           SizedBox(height: appPadding / 4),
           TextField(
             textAlign: TextAlign.left,
-            decoration: new InputDecoration(
-                hintText: 'Answer question ${idx + 1}',
-                border: new OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(
-                    const Radius.circular(8),
-                  ),
-                  borderSide: new BorderSide(
-                    color: primaryColor,
-                    width: 1.0,
-                  ),
-                ),
-                fillColor: white,
-                filled: true),
+            decoration: inputDecoration('Answer question ${idx + 1}'),
           ),
           SizedBox(height: appPadding * 2 / 3),
         ],
@@ -106,19 +94,8 @@ class _PollingMultiPageState extends State<PollingMultiPage> {
                               SizedBox(height: appPadding / 4),
                               TextField(
                                 textAlign: TextAlign.left,
-                                decoration: new InputDecoration(
-                                    hintText: 'Write your question here',
-                                    border: new OutlineInputBorder(
-                                      borderRadius: const BorderRadius.all(
-                                        const Radius.circular(8),
-                                      ),
-                                      borderSide: new BorderSide(
-                                        color: primaryColor,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    fillColor: white,
-                                    filled: true),
+                                decoration:
+                                    inputDecoration('Write your question here'),
                               ),
                               SizedBox(height: appPadding),
                               _buildOptionsList(),

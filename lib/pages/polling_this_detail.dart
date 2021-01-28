@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/components/bottom_menu.dart';
+import 'package:ollie_photo_social/components/choose/this_that_detail.dart';
 import 'package:ollie_photo_social/components/choose/yes_no_detail.dart';
 import 'package:ollie_photo_social/components/polling_back_icon.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/mock_data/user_data.dart';
-import 'package:ollie_photo_social/model/yes_no.dart';
+import 'package:ollie_photo_social/model/this_that.dart';
 
-class PollingYesDetailPage extends StatefulWidget {
-  PollingYesDetailPage({Key key, this.data}) : super(key: key);
+class PollingThisDetailPage extends StatefulWidget {
+  PollingThisDetailPage({Key key, this.data}) : super(key: key);
 
-  final YesNo data;
+  final ThisThat data;
 
   @override
-  _PollingYesDetailPageState createState() => _PollingYesDetailPageState();
+  _PollingThisDetailPageState createState() => _PollingThisDetailPageState();
 }
 
-class _PollingYesDetailPageState extends State<PollingYesDetailPage> {
+class _PollingThisDetailPageState extends State<PollingThisDetailPage> {
   int selectedCategory = 0;
 
   Widget _buildAvatar() {
@@ -97,7 +98,7 @@ class _PollingYesDetailPageState extends State<PollingYesDetailPage> {
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: appPadding * 1.5),
+            padding: EdgeInsets.symmetric(horizontal: appPadding),
             margin: EdgeInsets.only(top: appPadding * 1.2, bottom: 80),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -105,7 +106,7 @@ class _PollingYesDetailPageState extends State<PollingYesDetailPage> {
                 _buildAvatar(),
                 SizedBox(height: appPadding * 1.5),
                 Expanded(
-                  child: YesNoDetailCard(data: widget.data),
+                  child: ThisThatDetailCard(data: widget.data),
                 ),
               ],
             ),

@@ -3,16 +3,20 @@ import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/model/action_button.dart';
 
 class DialogBox {
-  static Dialog createSuccess(BuildContext context) {
+  static Dialog createSuccess(
+      BuildContext context, String message, Function action) {
     return create(
       context,
       ActionState.success,
       'Thank You!',
-      'Your polling has been sent.',
+      message == null ? 'Your polling has been sent.' : message,
       [
         ActionButton(
           text: 'ok',
-          action: () => Navigator.of(context).pop(),
+          action: () {
+            Navigator.of(context).pop();
+            action();
+          },
         ),
       ],
     );

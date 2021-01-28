@@ -7,6 +7,8 @@ import 'package:ollie_photo_social/pages/polling_this.dart';
 import 'package:ollie_photo_social/pages/selected_photo.dart';
 import 'package:photo_manager/photo_manager.dart';
 
+import 'admin/add_coupon.dart';
+
 class GalleryPage extends StatefulWidget {
   GalleryPage({
     Key key,
@@ -21,14 +23,16 @@ class GalleryPage extends StatefulWidget {
     this.thatImage,
     this.thisPhotosPath,
     this.thatPhotosPath,
+    this.couponPage,
+    this.couponImage,
   }) : super(key: key);
 
   final int selectedIndex, selectedThisIndex, selectedThatIndex;
   final bool createMode;
   final List<String> photosPath, thisPhotosPath, thatPhotosPath;
-  final bool thisThatPage;
+  final bool thisThatPage, couponPage;
   final bool isThis;
-  final String thisImage, thatImage;
+  final String thisImage, thatImage, couponImage;
 
   _GalleryState createState() => _GalleryState();
 }
@@ -49,40 +53,49 @@ class _GalleryState extends State<GalleryPage> {
   Future<void> selectPhoto(AssetEntity entity) async {
     File assetFile = await entity.file;
     bool thisThatPage = widget.thisThatPage;
+    bool couponPage = widget.couponPage;
     Widget routeWidget;
 
-    if (thisThatPage == null || !thisThatPage)
-      routeWidget = SelectedPhotosPage(
-        selectedIndex: widget.selectedIndex,
-        imagePath: assetFile.path,
-        createMode: widget.createMode,
-        photosPath: widget.photosPath,
+    if (couponPage != null && couponPage) {
+      print('media image ${assetFile.path}');
+      routeWidget = AddCouponPage(
+        couponLogo: assetFile.path,
       );
-    else {
-      List thisPhotos = widget.thisPhotosPath;
-      List thatPhotos = widget.thatPhotosPath;
-      if (widget.createMode == null || widget.createMode) {
-        if (widget.isThis)
-          thisPhotos.add(assetFile.path);
-        else
-          thatPhotos.add(assetFile.path);
-      } else {
-        if (widget.isThis)
-          thisPhotos[widget.selectedThisIndex] = assetFile.path;
-        else
-          thatPhotos[widget.selectedThatIndex] = assetFile.path;
+    } else {
+      if (thisThatPage == null || !thisThatPage)
+        routeWidget = SelectedPhotosPage(
+          selectedIndex: widget.selectedIndex,
+          imagePath: assetFile.path,
+          createMode: widget.createMode,
+          photosPath: widget.photosPath,
+        );
+      else {
+        List thisPhotos = widget.thisPhotosPath;
+        List thatPhotos = widget.thatPhotosPath;
+        if (widget.createMode == null || widget.createMode) {
+          if (widget.isThis)
+            thisPhotos.add(assetFile.path);
+          else
+            thatPhotos.add(assetFile.path);
+        } else {
+          if (widget.isThis)
+            thisPhotos[widget.selectedThisIndex] = assetFile.path;
+          else
+            thatPhotos[widget.selectedThatIndex] = assetFile.path;
+        }
+
+        routeWidget = PollingThisPage(
+          thisThat: widget.isThis,
+          createMode: widget.createMode == null || widget.createMode,
+          selectedThisIndex: widget.selectedThisIndex,
+          selectedThatIndex: widget.selectedThatIndex,
+          thisPhotos: thisPhotos,
+          thatPhotos: thatPhotos,
+        );
       }
-      routeWidget = PollingThisPage(
-        thisThat: widget.isThis,
-        createMode: widget.createMode == null || widget.createMode,
-        selectedThisIndex: widget.selectedThisIndex,
-        selectedThatIndex: widget.selectedThatIndex,
-        thisPhotos: thisPhotos,
-        thatPhotos: thatPhotos,
-      );
     }
 
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => routeWidget,

@@ -1,17 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ollie_photo_social/components/bottom_next.dart';
+import 'package:ollie_photo_social/components/dialog_box.dart';
 import 'package:ollie_photo_social/components/responsive_scaffold.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/components/polling_back_icon.dart';
+import 'package:ollie_photo_social/pages/gallery.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 class AddCouponPage extends StatefulWidget {
-  AddCouponPage({Key key}) : super(key: key);
+  AddCouponPage({Key key, this.couponLogo}) : super(key: key);
+  final String couponLogo;
 
   @override
   _AddCouponPageState createState() => _AddCouponPageState();
 }
 
 class _AddCouponPageState extends State<AddCouponPage> {
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now();
+  TextEditingController startDtController = TextEditingController();
+  TextEditingController endDtController = TextEditingController();
+  String couponImage;
+
+  void createCoupon() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DialogBox.createSuccess(
+          context,
+          'Your coupon has been added.',
+          () => Navigator.pop(context),
+        );
+      },
+    );
+  }
+
+  void _openGallery() async {
+    final permitted = await PhotoManager.requestPermission();
+    if (!permitted) return;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => GalleryPage(
+          couponPage: true,
+          couponImage: this.couponImage,
+        ),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    startDtController.text = DateFormat('yyyy/M/d').format(startDate);
+    endDtController.text = DateFormat('yyyy/M/d').format(endDate);
+    if (widget.couponLogo != null) print('coupon logo ${widget.couponLogo}');
+    super.initState();
+  }
+
+  void _selectDate(BuildContext context, bool isThis) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: isThis ? startDate : endDate, // Refer step 1
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+    );
+    if (picked != null && picked != (isThis ? startDate : endDate))
+      setState(() {
+        if (isThis) {
+          startDate = picked;
+          startDtController.text = DateFormat('yyyy/M/d').format(startDate);
+        } else {
+          endDate = picked;
+          endDtController.text = DateFormat('yyyy/M/d').format(endDate);
+        }
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -40,7 +104,6 @@ class _AddCouponPageState extends State<AddCouponPage> {
                       vertical: appPadding * 1.5,
                       horizontal: appPadding,
                     ),
-                    // margin: EdgeInsets.only(top: appPadding),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.max,
@@ -54,58 +117,21 @@ class _AddCouponPageState extends State<AddCouponPage> {
                               SizedBox(height: appPadding / 4),
                               TextFormField(
                                 textAlign: TextAlign.left,
-                                decoration: new InputDecoration(
-                                    hintText: 'Costa Coffee',
-                                    border: new OutlineInputBorder(
-                                      borderRadius: const BorderRadius.all(
-                                        const Radius.circular(8),
-                                      ),
-                                      borderSide: new BorderSide(
-                                        color: primaryColor,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    fillColor: white,
-                                    filled: true),
+                                decoration: inputDecoration('Store Name'),
                               ),
                               SizedBox(height: appPadding / 2),
                               Text('Offer', style: TextStyle(color: white)),
                               SizedBox(height: appPadding / 4),
                               TextFormField(
                                 textAlign: TextAlign.left,
-                                decoration: new InputDecoration(
-                                    hintText: '10% or 5K.D',
-                                    border: new OutlineInputBorder(
-                                      borderRadius: const BorderRadius.all(
-                                        const Radius.circular(8),
-                                      ),
-                                      borderSide: new BorderSide(
-                                        color: primaryColor,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    fillColor: white,
-                                    filled: true),
+                                decoration: inputDecoration('Offer'),
                               ),
                               SizedBox(height: appPadding / 2),
                               Text('Header', style: TextStyle(color: white)),
                               SizedBox(height: appPadding / 4),
                               TextFormField(
                                 textAlign: TextAlign.left,
-                                decoration: new InputDecoration(
-                                    hintText:
-                                        'Purchase anything from store and get the ...',
-                                    border: new OutlineInputBorder(
-                                      borderRadius: const BorderRadius.all(
-                                        const Radius.circular(8),
-                                      ),
-                                      borderSide: new BorderSide(
-                                        color: primaryColor,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    fillColor: white,
-                                    filled: true),
+                                decoration: inputDecoration('Header'),
                               ),
                               SizedBox(height: appPadding / 2),
                               Text('Conditions',
@@ -116,20 +142,7 @@ class _AddCouponPageState extends State<AddCouponPage> {
                                 keyboardType: TextInputType.multiline,
                                 minLines: 3,
                                 maxLines: 3,
-                                decoration: new InputDecoration(
-                                    hintText:
-                                        'only for 10 k.d products and up does not include sweets',
-                                    border: new OutlineInputBorder(
-                                      borderRadius: const BorderRadius.all(
-                                        const Radius.circular(8),
-                                      ),
-                                      borderSide: new BorderSide(
-                                        color: primaryColor,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    fillColor: white,
-                                    filled: true),
+                                decoration: inputDecoration('Conditions'),
                               ),
                               SizedBox(height: appPadding / 2),
                               Row(
@@ -145,20 +158,13 @@ class _AddCouponPageState extends State<AddCouponPage> {
                                         TextFormField(
                                           textAlign: TextAlign.left,
                                           keyboardType: TextInputType.datetime,
-                                          decoration: new InputDecoration(
-                                              hintText: '2021 / 3 / 22',
-                                              border: new OutlineInputBorder(
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                  const Radius.circular(8),
-                                                ),
-                                                borderSide: new BorderSide(
-                                                  color: primaryColor,
-                                                  width: 1.0,
-                                                ),
-                                              ),
-                                              fillColor: white,
-                                              filled: true),
+                                          controller: startDtController,
+                                          showCursor: true,
+                                          readOnly: true,
+                                          onTap: () =>
+                                              _selectDate(context, true),
+                                          decoration:
+                                              inputDecoration('Start Date'),
                                         ),
                                         SizedBox(height: appPadding / 2),
                                       ],
@@ -170,26 +176,19 @@ class _AddCouponPageState extends State<AddCouponPage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text('Start Date',
+                                        Text('End Date',
                                             style: TextStyle(color: white)),
                                         SizedBox(height: appPadding / 4),
                                         TextFormField(
                                           textAlign: TextAlign.left,
                                           keyboardType: TextInputType.datetime,
-                                          decoration: new InputDecoration(
-                                              hintText: '2021 / 4 / 22',
-                                              border: new OutlineInputBorder(
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                  const Radius.circular(8),
-                                                ),
-                                                borderSide: new BorderSide(
-                                                  color: primaryColor,
-                                                  width: 1.0,
-                                                ),
-                                              ),
-                                              fillColor: white,
-                                              filled: true),
+                                          controller: endDtController,
+                                          showCursor: true,
+                                          readOnly: true,
+                                          onTap: () =>
+                                              _selectDate(context, false),
+                                          decoration:
+                                              inputDecoration('End Date'),
                                         ),
                                         SizedBox(height: appPadding / 2),
                                       ],
@@ -210,20 +209,7 @@ class _AddCouponPageState extends State<AddCouponPage> {
                                         TextFormField(
                                           textAlign: TextAlign.left,
                                           keyboardType: TextInputType.datetime,
-                                          decoration: new InputDecoration(
-                                              hintText: '50',
-                                              border: new OutlineInputBorder(
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                  const Radius.circular(8),
-                                                ),
-                                                borderSide: new BorderSide(
-                                                  color: primaryColor,
-                                                  width: 1.0,
-                                                ),
-                                              ),
-                                              fillColor: white,
-                                              filled: true),
+                                          decoration: inputDecoration('Usage'),
                                         ),
                                         SizedBox(height: appPadding / 2),
                                       ],
@@ -241,20 +227,7 @@ class _AddCouponPageState extends State<AddCouponPage> {
                                         TextFormField(
                                           textAlign: TextAlign.left,
                                           keyboardType: TextInputType.datetime,
-                                          decoration: new InputDecoration(
-                                              hintText: '50',
-                                              border: new OutlineInputBorder(
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                  const Radius.circular(8),
-                                                ),
-                                                borderSide: new BorderSide(
-                                                  color: primaryColor,
-                                                  width: 1.0,
-                                                ),
-                                              ),
-                                              fillColor: white,
-                                              filled: true),
+                                          decoration: inputDecoration('Points'),
                                         ),
                                         SizedBox(height: appPadding / 2),
                                       ],
@@ -265,7 +238,7 @@ class _AddCouponPageState extends State<AddCouponPage> {
                             ],
                           ),
                           InkWell(
-                            onTap: () => {},
+                            onTap: () => _openGallery(),
                             child: Text(
                               '+ Add Logo',
                               style: TextStyle(color: yellowColor),
@@ -277,7 +250,9 @@ class _AddCouponPageState extends State<AddCouponPage> {
               ],
             ),
           ),
-          BottomNextIcon(),
+          BottomNextIcon(
+            nextAction: createCoupon,
+          ),
         ],
       ),
     );

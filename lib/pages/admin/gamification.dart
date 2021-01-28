@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/components/bottom_next.dart';
+import 'package:ollie_photo_social/components/dialog_box.dart';
 import 'package:ollie_photo_social/components/responsive_scaffold.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/components/polling_back_icon.dart';
@@ -12,6 +13,19 @@ class GamificationPage extends StatefulWidget {
 }
 
 class _GamificationPageState extends State<GamificationPage> {
+  void updateGamification() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DialogBox.createSuccess(
+          context,
+          'All changes has been saved.',
+          () => Navigator.pop(context),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -52,19 +66,7 @@ class _GamificationPageState extends State<GamificationPage> {
                               TextFormField(
                                 textAlign: TextAlign.center,
                                 initialValue: '10',
-                                decoration: new InputDecoration(
-                                    hintText: '',
-                                    border: new OutlineInputBorder(
-                                      borderRadius: const BorderRadius.all(
-                                        const Radius.circular(8),
-                                      ),
-                                      borderSide: new BorderSide(
-                                        color: primaryColor,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    fillColor: white,
-                                    filled: true),
+                                decoration: inputDecoration(''),
                               ),
                               SizedBox(height: appPadding),
                               Text('Fast reply',
@@ -73,19 +75,7 @@ class _GamificationPageState extends State<GamificationPage> {
                               TextFormField(
                                 textAlign: TextAlign.center,
                                 initialValue: '50',
-                                decoration: new InputDecoration(
-                                    hintText: '',
-                                    border: new OutlineInputBorder(
-                                      borderRadius: const BorderRadius.all(
-                                        const Radius.circular(8),
-                                      ),
-                                      borderSide: new BorderSide(
-                                        color: primaryColor,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    fillColor: white,
-                                    filled: true),
+                                decoration: inputDecoration(''),
                               ),
                               SizedBox(height: appPadding),
                               Text('Points every number of replys',
@@ -94,19 +84,7 @@ class _GamificationPageState extends State<GamificationPage> {
                               TextFormField(
                                 textAlign: TextAlign.center,
                                 initialValue: '10',
-                                decoration: new InputDecoration(
-                                    hintText: '',
-                                    border: new OutlineInputBorder(
-                                      borderRadius: const BorderRadius.all(
-                                        const Radius.circular(8),
-                                      ),
-                                      borderSide: new BorderSide(
-                                        color: primaryColor,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    fillColor: white,
-                                    filled: true),
+                                decoration: inputDecoration(''),
                               ),
                               SizedBox(height: appPadding),
                             ],
@@ -117,7 +95,7 @@ class _GamificationPageState extends State<GamificationPage> {
               ],
             ),
           ),
-          BottomNextIcon(),
+          BottomNextIcon(nextAction: updateGamification),
         ],
       ),
     );

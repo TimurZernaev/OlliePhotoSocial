@@ -121,18 +121,7 @@ class _SetPollingThisPageState extends State<SetPollingThisPage> {
                                   children: _buildCarousel(size, false),
                                   controller: _thatController,
                                 ),
-                              ), /* Container(
-                                width: size.width,
-                                height: size.height * .4,
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.circular(appPadding * 2 / 3),
-                                  image: DecorationImage(
-                                      image: Image.file(File(widget.thatImage))
-                                          .image,
-                                      fit: BoxFit.cover),
-                                ),
-                              ), */
+                              ),
                             ),
                           ],
                         ),
@@ -141,19 +130,8 @@ class _SetPollingThisPageState extends State<SetPollingThisPage> {
                         SizedBox(height: appPadding / 4),
                         TextField(
                           textAlign: TextAlign.left,
-                          decoration: new InputDecoration(
-                              hintText: 'Write your question here',
-                              border: new OutlineInputBorder(
-                                borderRadius: const BorderRadius.all(
-                                  const Radius.circular(8),
-                                ),
-                                borderSide: new BorderSide(
-                                  color: primaryColor,
-                                  width: 1.0,
-                                ),
-                              ),
-                              fillColor: white,
-                              filled: true),
+                          decoration:
+                              inputDecoration('Write your question here'),
                         ),
                         SizedBox(height: appPadding),
                         Text('Polling Duration',

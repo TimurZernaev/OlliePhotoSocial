@@ -1,9 +1,9 @@
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/components/bottom_next.dart';
 import 'package:ollie_photo_social/constants.dart';
-import 'dart:math' as math;
 import 'package:camera/camera.dart';
 import 'package:ollie_photo_social/pages/gallery.dart';
 import 'package:ollie_photo_social/pages/set_polling_this.dart';

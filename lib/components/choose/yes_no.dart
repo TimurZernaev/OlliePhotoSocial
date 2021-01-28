@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/model/yes_no.dart';
+import 'package:ollie_photo_social/pages/polling_yes_detail.dart';
 
 class YesNoCard extends StatefulWidget {
   final YesNo data;
@@ -13,6 +14,15 @@ class YesNoCard extends StatefulWidget {
 class _YesNoCardState extends State<YesNoCard> {
   int currentIndex = 0;
 
+  void goPollingYesDetailPage(YesNo data) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PollingYesDetailPage(data: data),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final data = widget.data;
@@ -22,9 +32,6 @@ class _YesNoCardState extends State<YesNoCard> {
         vertical: appPadding / 3,
         horizontal: appPadding / 2,
       ),
-      /* decoration: BoxDecoration(
-        border: Border.all(color: black.withOpacity(0.4)),
-      ), */
       child: Column(
         children: [
           Container(
@@ -104,13 +111,17 @@ class _YesNoCardState extends State<YesNoCard> {
           Stack(
             alignment: AlignmentDirectional.bottomCenter,
             children: [
-              Container(
-                margin: EdgeInsets.only(bottom: appPadding / 3),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image(
-                    fit: BoxFit.cover,
-                    image: AssetImage('assets/images/data/' + data.imageUrl),
+              InkWell(
+                onTap: () => goPollingYesDetailPage(data),
+                child: Container(
+                  margin: EdgeInsets.only(bottom: appPadding / 3),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image(
+                      fit: BoxFit.cover,
+                      image:
+                          AssetImage('assets/images/data/' + data.imageUrls[0]),
+                    ),
                   ),
                 ),
               ),

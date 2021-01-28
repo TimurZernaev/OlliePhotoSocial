@@ -20,6 +20,22 @@ const Color gray2Color = Color.fromRGBO(228, 228, 228, 1.0);
 const Color gray3Color = Color.fromRGBO(144, 144, 144, 1.0);
 const Color redColor = Color.fromRGBO(223, 96, 114, 1.0);
 const Color yellowColor = Color.fromRGBO(255, 206, 101, 1.0);
+
+InputDecoration inputDecoration(String hintText) => InputDecoration(
+    hintText: hintText,
+    border: OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        const Radius.circular(8),
+      ),
+      /* borderSide: BorderSide(
+        color: primaryColor,
+        width: 1.0,
+      ), */
+    ),
+    contentPadding: EdgeInsets.symmetric(
+        horizontal: appPadding * 2 / 3, vertical: appPadding / 3),
+    fillColor: white,
+    filled: true);
 //default app padding
 
 const double appPadding = 24.0;
