@@ -42,14 +42,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   Widget _buildInterestStep(Size size) {
     List interests = [
-      ["Women Bags", -0.09, 0.12, 1.0],
-      ["Hats", .4, .05, .5],
-      ["Electronics", .65, .08, .8],
-      ["Watches", .3, .27, 1.15],
-      ["Cars", .75, .35, .55],
-      ["Wallets", -0.07, .5, .8],
-      ["Comics", .4, .58, .5],
-      ["Jewellery", .7, .5, 1.0],
+      ["Women Bags", -0.03, 0.06, .88],
+      ["Hats", .4, .05, .4],
+      ["Electronics", .65, .05, .6],
+      ["Watches", .3, .25, 1.0],
+      ["Cars", .75, .28, .5],
+      ["Wallets", -0.05, .48, .7],
+      ["Comics", .4, .55, .45],
+      ["Jewellery", .7, .46, .9],
     ];
     return Expanded(
       child: Column(
@@ -70,6 +70,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   Widget _buildCategoryItem(List interest, int index, Size size) {
+    final catImage = '${interest[0].toString().toLowerCase()}.png';
     return Positioned(
       left: size.width * interest[1],
       top: size.height * .83 * interest[2],
@@ -88,9 +89,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   ),
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                      image: AssetImage(
-                          "assets/images/icon/${interest[0].toString().toLowerCase()}.png"),
-                      fit: BoxFit.fill),
+                    image: AssetImage("assets/images/icon/${catImage}"),
+                    fit: BoxFit.fill,
+                  ),
                 ),
                 width: 150 * interest[3],
                 height: 150 * interest[3],
