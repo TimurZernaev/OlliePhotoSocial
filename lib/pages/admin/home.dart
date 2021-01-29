@@ -14,29 +14,54 @@ class AdminHomePage extends StatefulWidget {
 }
 
 class _AdminHomePageState extends State<AdminHomePage> {
+  bool pressedAddCp = false,
+      pressedRmCp = false,
+      pressedBlUser = false,
+      pressedGame = false;
+
   void goGamification() {
+    setState(() {
+      pressedGame = true;
+    });
     goAdminSettingPage(GamificationPage());
   }
 
   void goAddCoupon() {
+    setState(() {
+      pressedAddCp = true;
+    });
     goAdminSettingPage(AddCouponPage());
   }
 
   void goRemoveCoupon() {
+    setState(() {
+      pressedRmCp = true;
+    });
     goAdminSettingPage(RemoveCouponsPage());
   }
 
   void goBlockUser() {
+    setState(() {
+      pressedBlUser = true;
+    });
     goAdminSettingPage(BlockUserPage());
   }
 
   void goAdminSettingPage(Widget routeWidget) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => routeWidget,
-      ),
-    );
+    Future.delayed(Duration(milliseconds: 10), () {
+      setState(() {
+        pressedGame = false;
+        pressedAddCp = false;
+        pressedRmCp = false;
+        pressedBlUser = false;
+      });
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => routeWidget,
+        ),
+      );
+    });
   }
 
   @override
@@ -66,33 +91,39 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     fontSize: 22,
                   ),
                 ),
-                SizedBox(height: appPadding),
+                Expanded(
+                  child: SizedBox(height: appPadding),
+                ),
                 BlockRaisedButton(
                     label: 'Gamification',
-                    color: yellowColor,
-                    textColor: primaryColor,
+                    color: pressedGame ? yellowColor : Colors.transparent,
+                    textColor: pressedGame ? primaryColor : yellowColor,
+                    borderColor: pressedGame ? null : yellowColor,
                     action: goGamification),
                 SizedBox(height: appPadding),
                 BlockRaisedButton(
                     label: 'Add Coupon',
-                    color: Colors.transparent,
-                    textColor: yellowColor,
-                    borderColor: yellowColor,
+                    color: pressedAddCp ? yellowColor : Colors.transparent,
+                    textColor: pressedAddCp ? primaryColor : yellowColor,
+                    borderColor: pressedAddCp ? null : yellowColor,
                     action: goAddCoupon),
                 SizedBox(height: appPadding),
                 BlockRaisedButton(
                     label: 'Remove Coupon',
-                    color: Colors.transparent,
-                    textColor: yellowColor,
-                    borderColor: yellowColor,
+                    color: pressedRmCp ? yellowColor : Colors.transparent,
+                    textColor: pressedRmCp ? primaryColor : yellowColor,
+                    borderColor: pressedRmCp ? null : yellowColor,
                     action: goRemoveCoupon),
                 SizedBox(height: appPadding),
                 BlockRaisedButton(
                     label: 'Block User',
-                    color: Colors.transparent,
-                    textColor: yellowColor,
-                    borderColor: yellowColor,
+                    color: pressedBlUser ? yellowColor : Colors.transparent,
+                    textColor: pressedBlUser ? primaryColor : yellowColor,
+                    borderColor: pressedBlUser ? null : yellowColor,
                     action: goBlockUser),
+                Expanded(
+                  child: SizedBox(height: appPadding),
+                ),
               ],
             ),
           ),

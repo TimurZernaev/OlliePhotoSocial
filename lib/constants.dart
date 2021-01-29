@@ -33,7 +33,7 @@ InputDecoration inputDecoration(String hintText) => InputDecoration(
       ), */
     ),
     contentPadding: EdgeInsets.symmetric(
-        horizontal: appPadding * 2 / 3, vertical: appPadding / 3),
+        horizontal: appPadding * 2 / 3, vertical: appPadding / 4),
     fillColor: white,
     filled: true);
 //default app padding

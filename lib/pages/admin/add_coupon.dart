@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ollie_photo_social/components/bottom_next.dart';
@@ -39,7 +41,8 @@ class _AddCouponPageState extends State<AddCouponPage> {
   void _openGallery() async {
     final permitted = await PhotoManager.requestPermission();
     if (!permitted) return;
-    Navigator.of(context).push(
+    Navigator.pushReplacement(
+      context,
       MaterialPageRoute(
         builder: (_) => GalleryPage(
           couponPage: true,
@@ -53,7 +56,10 @@ class _AddCouponPageState extends State<AddCouponPage> {
   void initState() {
     startDtController.text = DateFormat('yyyy/M/d').format(startDate);
     endDtController.text = DateFormat('yyyy/M/d').format(endDate);
-    if (widget.couponLogo != null) print('coupon logo ${widget.couponLogo}');
+    if (widget.couponLogo != null)
+      setState(() {
+        couponImage = widget.couponLogo;
+      });
     super.initState();
   }
 
@@ -101,7 +107,7 @@ class _AddCouponPageState extends State<AddCouponPage> {
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.symmetric(
-                      vertical: appPadding * 1.5,
+                      vertical: appPadding,
                       horizontal: appPadding,
                     ),
                     child: Column(
@@ -237,11 +243,33 @@ class _AddCouponPageState extends State<AddCouponPage> {
                               ),
                             ],
                           ),
-                          InkWell(
-                            onTap: () => _openGallery(),
-                            child: Text(
-                              '+ Add Logo',
-                              style: TextStyle(color: yellowColor),
+                          SizedBox(height: appPadding),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () => _openGallery(),
+                              child: couponImage == null
+                                  ? Container(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Text(
+                                        '+ Add Logo',
+                                        style: TextStyle(color: yellowColor),
+                                      ),
+                                    )
+                                  : Container(
+                                      width: 100,
+                                      height: 100,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          width: 3,
+                                          color: white,
+                                        ),
+                                        image: DecorationImage(
+                                          image: Image.file(File(couponImage))
+                                              .image,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
                             ),
                           ),
                         ]),

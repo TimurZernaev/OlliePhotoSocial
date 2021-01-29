@@ -29,8 +29,8 @@ class _PollingYesDetailPageState extends State<PollingYesDetailPage> {
                 alignment: Alignment.topLeft,
                 children: <Widget>[
                   Container(
-                    height: 80,
-                    width: 80,
+                    height: 64,
+                    width: 64,
                     decoration: BoxDecoration(
                       border: Border.all(
                           color: yellowColor,
@@ -49,7 +49,7 @@ class _PollingYesDetailPageState extends State<PollingYesDetailPage> {
                   ),
                   if (userList[3].online)
                     Container(
-                      margin: EdgeInsets.only(top: 65, left: 65),
+                      margin: EdgeInsets.only(top: 52, left: 45),
                       height: 10,
                       width: 10,
                       decoration: BoxDecoration(
@@ -77,7 +77,7 @@ class _PollingYesDetailPageState extends State<PollingYesDetailPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Stack(
-        alignment: Alignment.bottomCenter,
+        alignment: Alignment.topCenter,
         children: [
           Positioned(
             top: -size.height * 0.07,
@@ -91,14 +91,17 @@ class _PollingYesDetailPageState extends State<PollingYesDetailPage> {
                     image: AssetImage('assets/images/layout/home_topbar.png'),
                     fit: BoxFit.cover,
                   ),
-                  PollingBackIcon()
+                  Container(
+                    margin: EdgeInsets.only(top: appPadding * 2.5),
+                    child: PollingBackIcon(),
+                  ),
                 ],
               ),
             ),
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: appPadding * 1.5),
-            margin: EdgeInsets.only(top: appPadding * 1.2, bottom: 80),
+            margin: EdgeInsets.only(top: appPadding * 1.6, bottom: 80),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -107,6 +110,7 @@ class _PollingYesDetailPageState extends State<PollingYesDetailPage> {
                 Expanded(
                   child: YesNoDetailCard(data: widget.data),
                 ),
+                SizedBox(height: appPadding),
               ],
             ),
           ),

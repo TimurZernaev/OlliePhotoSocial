@@ -8,7 +8,7 @@ class PollingBackIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: appPadding * 1.5),
+      margin: EdgeInsets.only(top: appPadding * 1.8),
       child: Stack(
         children: [
           Row(
@@ -41,7 +41,7 @@ class PollingBackIcon extends StatelessWidget {
                 (title == null) ? '' : title,
                 style: TextStyle(
                     color: white,
-                    /* fontWeight: FontWeight.bold, */ fontSize: 22),
+                    /* fontWeight: FontWeight.bold, */ fontSize: 20),
               )
             ],
           )

@@ -30,8 +30,8 @@ class _PollingThisDetailPageState extends State<PollingThisDetailPage> {
                 alignment: Alignment.topLeft,
                 children: <Widget>[
                   Container(
-                    height: 80,
-                    width: 80,
+                    height: 64,
+                    width: 64,
                     decoration: BoxDecoration(
                       border: Border.all(
                           color: yellowColor,
@@ -50,7 +50,7 @@ class _PollingThisDetailPageState extends State<PollingThisDetailPage> {
                   ),
                   if (userList[3].online)
                     Container(
-                      margin: EdgeInsets.only(top: 65, left: 65),
+                      margin: EdgeInsets.only(top: 52, left: 45),
                       height: 10,
                       width: 10,
                       decoration: BoxDecoration(
@@ -92,14 +92,17 @@ class _PollingThisDetailPageState extends State<PollingThisDetailPage> {
                     image: AssetImage('assets/images/layout/home_topbar.png'),
                     fit: BoxFit.cover,
                   ),
-                  PollingBackIcon()
+                  Container(
+                    margin: EdgeInsets.only(top: appPadding * 2.5),
+                    child: PollingBackIcon(),
+                  ),
                 ],
               ),
             ),
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: appPadding),
-            margin: EdgeInsets.only(top: appPadding * 1.2, bottom: 80),
+            margin: EdgeInsets.only(top: appPadding * 1.6, bottom: 80),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -108,6 +111,7 @@ class _PollingThisDetailPageState extends State<PollingThisDetailPage> {
                 Expanded(
                   child: ThisThatDetailCard(data: widget.data),
                 ),
+                SizedBox(height: appPadding),
               ],
             ),
           ),
