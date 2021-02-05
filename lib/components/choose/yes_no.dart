@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/model/yes_no.dart';
 import 'package:ollie_photo_social/pages/polling_yes_detail.dart';
+import 'package:ollie_photo_social/pages/user_detail.dart';
 
 class YesNoCard extends StatefulWidget {
   final YesNo data;
@@ -14,11 +15,11 @@ class YesNoCard extends StatefulWidget {
 class _YesNoCardState extends State<YesNoCard> {
   int currentIndex = 0;
 
-  void goPollingYesDetailPage(YesNo data) {
+  void goPollingYesDetailPage() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PollingYesDetailPage(data: data),
+        builder: (context) => PollingYesDetailPage(data: widget.data),
       ),
     );
   }
@@ -43,18 +44,20 @@ class _YesNoCardState extends State<YesNoCard> {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  margin: EdgeInsets.only(
-                    right: 10,
-                  ),
-                  height: 32,
-                  width: 32,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: AssetImage(
-                          "assets/images/avatar/" + data.user.imageUrl),
-                      fit: BoxFit.fitWidth,
+                GestureDetector(
+                  onTap: () => goUserDetailPage(context, data.user),
+                  child: Container(
+                    margin: EdgeInsets.only(
+                      right: 10,
+                    ),
+                    height: 32,
+                    width: 32,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: getAvatar(data.user.avatar),
+                        fit: BoxFit.fitWidth,
+                      ),
                     ),
                   ),
                 ),
@@ -74,12 +77,13 @@ class _YesNoCardState extends State<YesNoCard> {
                           margin: EdgeInsets.only(
                             right: appPadding / 3,
                           ),
-                          child: Text(data.time),
+                          child: Text(data.end_time.split(' ').first),
                         ),
                         Image(
-                          image: AssetImage(data.isGroup
-                              ? "assets/images/icon/group.png"
-                              : "assets/images/icon/map.png"),
+                          image: AssetImage(
+                              data.is_group != null && data.is_group
+                                  ? "assets/images/icon/group.png"
+                                  : "assets/images/icon/map.png"),
                         ),
                       ],
                     )
@@ -112,15 +116,15 @@ class _YesNoCardState extends State<YesNoCard> {
             alignment: AlignmentDirectional.bottomCenter,
             children: [
               InkWell(
-                onTap: () => goPollingYesDetailPage(data),
+                onTap: () => goPollingYesDetailPage(),
                 child: Container(
                   margin: EdgeInsets.only(bottom: appPadding / 3),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image(
                       fit: BoxFit.cover,
-                      image:
-                          AssetImage('assets/images/data/' + data.imageUrls[0]),
+                      image: Image.network('$polling_base/${data.images[0]}')
+                          .image /* AssetImage('assets/images/data/' + data.images[0]) */,
                     ),
                   ),
                 ),

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/constants.dart';
 
 class DigitalCodeField extends StatefulWidget {
-  DigitalCodeField({Key key, this.digits}) : super(key: key);
+  DigitalCodeField({Key key, this.digits, this.chagedDigits}) : super(key: key);
   final int digits;
+  final Function chagedDigits;
 
   _DigitalCodeFieldState createState() => _DigitalCodeFieldState();
 }
@@ -11,6 +12,7 @@ class DigitalCodeField extends StatefulWidget {
 class _DigitalCodeFieldState extends State<DigitalCodeField> {
   int focused = 0;
   List<FocusNode> _focusNodes = []; //List.generate(4, (index) => FocusNode());
+  List<String> code;
 
   List<Widget> _buildDCWidget() {
     List<Widget> dcWidget = [];
@@ -36,6 +38,7 @@ class _DigitalCodeFieldState extends State<DigitalCodeField> {
             textAlign: TextAlign.center,
             keyboardType: TextInputType.number,
             focusNode: _focusNodes[idx],
+            onChanged: (String c) => digitChanged(idx, c),
             maxLength: 1,
             decoration: InputDecoration(
               hintText: '',
@@ -67,6 +70,9 @@ class _DigitalCodeFieldState extends State<DigitalCodeField> {
         }
       });
     }
+    setState(() {
+      code = List.generate(widget.digits, (index) => null);
+    });
     super.initState();
   }
 
@@ -74,6 +80,13 @@ class _DigitalCodeFieldState extends State<DigitalCodeField> {
   void dispose() {
     _focusNodes.forEach((el) => el.dispose());
     super.dispose();
+  }
+
+  void digitChanged(int idx, String cd) {
+    setState(() {
+      code[idx] = cd;
+      widget.chagedDigits(code);
+    });
   }
 
   @override

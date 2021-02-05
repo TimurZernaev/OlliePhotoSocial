@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/components/bottom_next.dart';
 import 'package:ollie_photo_social/components/responsive_scaffold.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/components/polling_back_icon.dart';
+import 'package:ollie_photo_social/model/polling.dart';
 import 'package:ollie_photo_social/pages/share.dart';
 
 class PollingMultiPage extends StatefulWidget {
@@ -15,19 +18,43 @@ class PollingMultiPage extends StatefulWidget {
 class _PollingMultiPageState extends State<PollingMultiPage> {
   String dropdownValue = '1 hour';
   int optionsLength = 2;
+  List<String> optionsTitle = [null, null];
+  bool titleError = false;
+  List<bool> optionsError = [false, false];
+  String title;
 
   void nextAction() {
+    Iterable emptyOptions =
+        optionsTitle.where((title) => title == null || title.isEmpty);
+    if (emptyOptions.length > 0) {
+      return setState(() {
+        optionsTitle.asMap().forEach((index, title) {
+          if (title == null || title.isEmpty) optionsError[index] = true;
+        });
+      });
+    }
+    Map data = {
+      'fields': {
+        'title': title,
+        'duration': dropdownValue,
+        'options': jsonEncode(optionsTitle)
+      },
+      'files': null
+    };
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SharePage(),
+        builder: (context) => SharePage(type: PollingType.multiple, data: data),
       ),
     );
   }
 
   void addOption() {
     setState(() {
-      if (optionsLength < 4) optionsLength++;
+      if (optionsLength == 4) return;
+      optionsLength++;
+      optionsTitle.add(null);
+      optionsError.add(false);
     });
   }
 
@@ -48,7 +75,14 @@ class _PollingMultiPageState extends State<PollingMultiPage> {
           SizedBox(height: appPadding / 4),
           TextField(
             textAlign: TextAlign.left,
-            decoration: inputDecoration('Answer question ${idx + 1}'),
+            decoration: inputDecoration(
+              'Answer question ${idx + 1}',
+              optionsError[idx] ? 'Answer is required' : null,
+            ),
+            onChanged: (text) => setState(() {
+              optionsTitle[idx] = text;
+              if (text != null && text.isNotEmpty) optionsError[idx] = false;
+            }),
           ),
           SizedBox(height: appPadding * 2 / 3),
         ],
@@ -94,8 +128,12 @@ class _PollingMultiPageState extends State<PollingMultiPage> {
                               SizedBox(height: appPadding / 4),
                               TextField(
                                 textAlign: TextAlign.left,
-                                decoration:
-                                    inputDecoration('Write your question here'),
+                                decoration: inputDecoration(
+                                  'Write your question here',
+                                  titleError ? 'Title is required' : null,
+                                ),
+                                onChanged: (text) =>
+                                    setState(() => title = text),
                               ),
                               SizedBox(height: appPadding),
                               _buildOptionsList(),

@@ -5,6 +5,7 @@ import 'package:ollie_photo_social/components/bottom_next.dart';
 import 'package:ollie_photo_social/components/responsive_scaffold.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/components/polling_back_icon.dart';
+import 'package:ollie_photo_social/model/polling.dart';
 import 'package:ollie_photo_social/pages/share.dart';
 
 class SetPollingThisPage extends StatefulWidget {
@@ -23,6 +24,8 @@ class SetPollingThisPage extends StatefulWidget {
 class _SetPollingThisPageState extends State<SetPollingThisPage> {
   String dropdownValue = '1 hour';
   PageController _thisController, _thatController;
+  String title;
+  bool titleError = false;
 
   @override
   void initState() {
@@ -32,10 +35,24 @@ class _SetPollingThisPageState extends State<SetPollingThisPage> {
   }
 
   void nextAction() {
+    if (title == null || title.isEmpty) {
+      return setState(() => titleError = true);
+    }
+    Map data = {
+      'fields': {
+        'title': title,
+        'duration': dropdownValue,
+      },
+      'files': {
+        'this_image': widget.thisImage,
+        'that_image': widget.thatImage,
+      }
+    };
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SharePage(),
+        builder: (context) =>
+            SharePage(type: PollingType.this_that, data: data),
       ),
     );
   }
@@ -100,18 +117,6 @@ class _SetPollingThisPageState extends State<SetPollingThisPage> {
                                   controller: _thisController,
                                 ),
                               ),
-                              /* Container(
-                                width: size.width,
-                                height: size.height * .4,
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.circular(appPadding * 2 / 3),
-                                  image: DecorationImage(
-                                      image: Image.file(File(widget.thisImage))
-                                          .image,
-                                      fit: BoxFit.cover),
-                                ),
-                              ), */
                             ),
                             Expanded(
                               child: Container(
@@ -130,8 +135,15 @@ class _SetPollingThisPageState extends State<SetPollingThisPage> {
                         SizedBox(height: appPadding / 4),
                         TextField(
                           textAlign: TextAlign.left,
-                          decoration:
-                              inputDecoration('Write your question here'),
+                          decoration: inputDecoration(
+                            'Write your question here',
+                            titleError ? 'Title is required' : null,
+                          ),
+                          onChanged: (text) => setState(() {
+                            title = text;
+                            if (text != null && text.isNotEmpty)
+                              titleError = false;
+                          }),
                         ),
                         SizedBox(height: appPadding),
                         Text('Polling Duration',

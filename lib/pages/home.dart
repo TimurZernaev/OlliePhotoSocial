@@ -5,11 +5,16 @@ import 'package:ollie_photo_social/components/choose/multi_choice.dart';
 import 'package:ollie_photo_social/components/user_list.dart';
 import 'package:ollie_photo_social/components/home_banner.dart';
 import 'package:ollie_photo_social/constants.dart';
-import 'package:ollie_photo_social/mock_data/multi_data.dart';
-import 'package:ollie_photo_social/mock_data/yes_no_data.dart';
-import 'package:ollie_photo_social/mock_data/this_that_data.dart';
+// import 'package:ollie_photo_social/mock_data/multi_data.dart';
+// import 'package:ollie_photo_social/mock_data/yes_no_data.dart';
+// import 'package:ollie_photo_social/mock_data/this_that_data.dart';
 import 'package:ollie_photo_social/components/choose/yes_no.dart';
 import 'package:ollie_photo_social/components/choose/this_that.dart';
+import 'package:ollie_photo_social/model/friend.dart';
+import 'package:ollie_photo_social/model/multi.dart';
+import 'package:ollie_photo_social/model/this_that.dart';
+import 'package:ollie_photo_social/model/yes_no.dart';
+import 'package:ollie_photo_social/module/request.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -22,6 +27,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int selectedCategory = 0;
+  List<YesNo> yesNoList = [];
+  List<ThisThat> thisThatList = [];
+  List<MultiChoice> multiList = [];
 
   void setSelectedCategory(int index) {
     setState(() {
@@ -43,6 +51,25 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildMultiItem(int index) {
     return MultiChoiceCard(data: multiList[index]);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPollingsList();
+  }
+
+  void getPollingsList() async {
+    Map res = await $get('/pollings', true);
+    setState(() {
+      yesNoList = List<YesNo>.from(
+          res['yes_list'].map((model) => YesNo.fromJson(model)));
+      thisThatList = List<ThisThat>.from(
+        res['this_list'].map((model) => ThisThat.fromJson(model)),
+      );
+      multiList = List<MultiChoice>.from(
+          res['multi_list'].map((model) => MultiChoice.fromJson(model)));
+    });
   }
 
   @override

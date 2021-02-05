@@ -39,9 +39,7 @@ class _PollingYesDetailPageState extends State<PollingYesDetailPage> {
                       color: Colors.black,
                       shape: BoxShape.circle,
                       image: DecorationImage(
-                        image: AssetImage(
-                          "assets/images/avatar/${widget.data.user.imageUrl}",
-                        ),
+                        image: getAvatar(widget.data.user.avatar),
                         fit: BoxFit.fitWidth,
                         alignment: Alignment.topCenter,
                       ),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/components/back_icon.dart';
-import 'package:ollie_photo_social/mock_data/user_data.dart';
-import 'package:ollie_photo_social/model/user.dart';
+import 'package:ollie_photo_social/model/follower.dart';
+import 'package:ollie_photo_social/module/request.dart';
+import 'package:ollie_photo_social/module/storage.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key key, this.title}) : super(key: key);
@@ -14,14 +15,74 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  List<User> filteredUsers = userList;
-  String followerString(int follows) {
-    int kFollows = (follows / 1000).round();
-    return (kFollows > 0) ? "${kFollows}k Followers" : "$follows Followers";
+  List<Follower> followers = [];
+  List<Follower> filteredUsers = [];
+  String name = '';
+
+  void activeOrBlockFollowing(int idx) async {
+    Follower follower = filteredUsers[idx];
+    var response = await $post(
+      '/setting/active-block-following',
+      {'follower_id': follower.user.id},
+      true,
+    );
+    if (response['status'] == 200) {
+      setState(() {
+        if (filteredUsers[idx].blocked == 1)
+          filteredUsers[idx].blocked = 0;
+        else
+          filteredUsers[idx].blocked = 1;
+      });
+    }
   }
 
-  Widget _buildFollower(BuildContext context, int index) {
-    User user = filteredUsers[index];
+  void addOrRemoveFriend(int idx) async {
+    Follower follower = filteredUsers[idx];
+    var response = await $post(
+      '/setting/add-remove-friend',
+      {'friend_id': follower.user.id},
+      true,
+    );
+    if (response['status'] == 200) {
+      setState(() {
+        if (!filteredUsers[idx].is_friend)
+          filteredUsers[idx].is_friend = true;
+        else
+          filteredUsers[idx].is_friend = false;
+      });
+    }
+  }
+
+  void getFollowers() async {
+    var res = await $get('/setting/followers', true);
+    var _name = await AppStorage.getUsername();
+    print(res);
+    setState(() {
+      name = _name;
+      followers = List<Follower>.from(
+        res['followers'].map((model) => Follower.fromJson(model)),
+      );
+      filteredUsers = followers;
+    });
+  }
+
+  void searchUser(text) {
+    setState(() {
+      filteredUsers = followers
+          .where((follower) =>
+              follower.user.name.toLowerCase().contains(text.toLowerCase()))
+          .toList();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getFollowers();
+  }
+
+  Widget _buildFollower(BuildContext context, int idx) {
+    Follower follower = filteredUsers[idx];
 
     return Container(
       margin: EdgeInsets.only(
@@ -58,7 +119,7 @@ class _SearchPageState extends State<SearchPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        user.name,
+                        follower.user.name,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -66,7 +127,7 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                       SizedBox(height: appPadding / 4),
                       Text(
-                        followerString(13008 /* user.followers */),
+                        followerString(follower.user.followers),
                         style: TextStyle(color: Colors.grey.shade500),
                       ),
                     ],
@@ -79,17 +140,17 @@ class _SearchPageState extends State<SearchPage> {
                       minWidth: 40,
                       child: RaisedButton(
                         textColor: white,
-                        color: redColor,
+                        color: follower.blocked == 0 ? redColor : primaryColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),
-                          side: BorderSide(color: Colors.red),
+                          // side: BorderSide(color: Colors.red),
                         ),
                         padding: EdgeInsets.symmetric(
                             vertical: appPadding / 3,
                             horizontal: appPadding / 2),
-                        onPressed: () {},
+                        onPressed: () => activeOrBlockFollowing(idx),
                         child: Text(
-                          'Block',
+                          follower.blocked == 0 ? 'Block' : 'Active',
                           style: TextStyle(
                               color: white,
                               fontWeight: FontWeight.bold,
@@ -101,17 +162,17 @@ class _SearchPageState extends State<SearchPage> {
                       minWidth: 34,
                       child: RaisedButton(
                         textColor: white,
-                        color: primaryColor,
+                        color: !follower.is_friend ? primaryColor : redColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),
-                          side: BorderSide(color: primaryColor),
+                          // side: BorderSide(color: primaryColor),
                         ),
                         padding: EdgeInsets.symmetric(
                             vertical: appPadding / 3,
                             horizontal: appPadding / 4),
-                        onPressed: () {},
+                        onPressed: () => addOrRemoveFriend(idx),
                         child: Text(
-                          '+',
+                          !follower.is_friend ? '+' : '-',
                           style: TextStyle(
                               color: white,
                               fontWeight: FontWeight.bold,
@@ -136,21 +197,13 @@ class _SearchPageState extends State<SearchPage> {
               borderRadius: BorderRadius.circular(15),
               child: Image(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/images/avatar/' + user.imageUrl),
+                image: getAvatar(follower.user.avatar),
               ),
             ),
           ),
         ],
       ),
     );
-  }
-
-  void searchUser(text) {
-    setState(() {
-      filteredUsers = userList
-          .where((user) => user.name.toLowerCase().contains(text.toLowerCase()))
-          .toList();
-    });
   }
 
   @override
@@ -176,7 +229,7 @@ class _SearchPageState extends State<SearchPage> {
                     child: Column(
                       children: [
                         Text(
-                          'Chalista Follower',
+                          '$name Follower',
                           style: TextStyle(
                             color: primaryColor,
                             fontWeight: FontWeight.bold,
@@ -185,7 +238,7 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                         SizedBox(height: appPadding / 6),
                         Text(
-                          '12K FOLLOWER',
+                          followerString(followers.length),
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

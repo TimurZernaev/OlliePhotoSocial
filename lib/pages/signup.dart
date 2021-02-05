@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/components/block_raised_button.dart';
 import 'package:ollie_photo_social/components/responsive_scaffold.dart';
 import 'package:ollie_photo_social/constants.dart';
+import 'package:ollie_photo_social/module/request.dart';
+import 'package:ollie_photo_social/module/storage.dart';
 import 'package:ollie_photo_social/pages/signin.dart';
 import 'package:ollie_photo_social/pages/verification.dart';
 
@@ -15,6 +17,15 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
+  bool _nameInvalid = false, _passwordInvalid = false, _mobileInvalid = false;
+  final _nameErrMsg = 'Username is required.';
+  final _pwdErrMsg = 'Password is required.';
+  final _mobileErrMsg = 'Mobile number is required';
+  bool loading;
+
   void goSignIn() {
     Navigator.push(
       context,
@@ -24,13 +35,45 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
-  void runSignup() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => VerificationPage(),
-      ),
-    );
+  void runSignup() async {
+    String username = usernameController.text;
+    String password = passwordController.text;
+    String mobile = mobileController.text;
+
+    if (username == null ||
+        username.isEmpty ||
+        password == null ||
+        password.isEmpty ||
+        mobile == null ||
+        mobile.isEmpty)
+      return setState(() {
+        if (username == null || username.isEmpty) _nameInvalid = true;
+        if (password == null || password.isEmpty) _passwordInvalid = true;
+        if (mobile == null || mobile.isEmpty) _mobileInvalid = true;
+      });
+    setState(() {
+      loading = true;
+    });
+    Map res = await $post('/signup', {
+      'name': username,
+      'password': password,
+      'mobile': mobile,
+    });
+    setState(() {
+      loading = false;
+    });
+    if (res['status'] == 200) {
+      await AppStorage.setMoibileNumber(mobile);
+      await AppStorage.setUsername(username);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VerificationPage(),
+        ),
+      );
+    } else {
+      print(res["message"]);
+    }
   }
 
   @override
@@ -90,7 +133,7 @@ class _SignupPageState extends State<SignupPage> {
                   height: appPadding,
                 ),
                 TextFormField(
-                  initialValue: '',
+                  controller: usernameController,
                   decoration: InputDecoration(
                     labelText: 'Username',
                     labelStyle: TextStyle(color: white, fontSize: 14),
@@ -103,10 +146,17 @@ class _SignupPageState extends State<SignupPage> {
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(appPadding / 2),
                         borderSide: BorderSide(color: white)),
+                    errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(appPadding / 2),
+                        borderSide: BorderSide(color: white)),
+                    focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(appPadding / 2),
+                        borderSide: BorderSide(color: white)),
                     suffixIcon: Icon(
                       Icons.check_circle_outline_rounded,
                       color: white,
                     ),
+                    errorText: _nameInvalid ? _nameErrMsg : null,
                   ),
                   style: TextStyle(color: white),
                 ),
@@ -114,8 +164,8 @@ class _SignupPageState extends State<SignupPage> {
                   height: appPadding * 2 / 3,
                 ),
                 TextFormField(
-                  initialValue: '',
                   obscureText: true,
+                  controller: passwordController,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     labelStyle: TextStyle(color: white, fontSize: 14),
@@ -128,10 +178,17 @@ class _SignupPageState extends State<SignupPage> {
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(appPadding / 2),
                         borderSide: BorderSide(color: white)),
+                    errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(appPadding / 2),
+                        borderSide: BorderSide(color: white)),
+                    focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(appPadding / 2),
+                        borderSide: BorderSide(color: white)),
                     suffixIcon: Icon(
                       Icons.remove_red_eye_outlined,
                       color: white,
                     ),
+                    errorText: _passwordInvalid ? _pwdErrMsg : null,
                   ),
                   style: TextStyle(color: white),
                 ),
@@ -139,8 +196,8 @@ class _SignupPageState extends State<SignupPage> {
                   height: appPadding * 2 / 3,
                 ),
                 TextFormField(
-                  initialValue: '',
                   keyboardType: TextInputType.number,
+                  controller: mobileController,
                   decoration: InputDecoration(
                     labelText: 'Mobile Number',
                     labelStyle: TextStyle(color: white, fontSize: 14),
@@ -153,10 +210,17 @@ class _SignupPageState extends State<SignupPage> {
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(appPadding / 2),
                         borderSide: BorderSide(color: white)),
+                    errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(appPadding / 2),
+                        borderSide: BorderSide(color: white)),
+                    focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(appPadding / 2),
+                        borderSide: BorderSide(color: white)),
                     suffixIcon: Icon(
                       Icons.check_circle_outline_rounded,
                       color: white,
                     ),
+                    errorText: _mobileInvalid ? _mobileErrMsg : null,
                   ),
                   style: TextStyle(color: white),
                 ),
@@ -195,6 +259,7 @@ class _SignupPageState extends State<SignupPage> {
               ],
             ),
           ),
+          indicator(loading),
         ],
       ),
     );

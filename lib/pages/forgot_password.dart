@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/components/block_raised_button.dart';
 import 'package:ollie_photo_social/constants.dart';
+import 'package:ollie_photo_social/module/storage.dart';
 import 'package:ollie_photo_social/pages/verification.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
@@ -13,11 +14,15 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-  void runForgotAction() {
+  String name, mobile;
+  TextEditingController mobileController = TextEditingController();
+
+  void runForgotAction() async {
+    await AppStorage.setMoibileNumber(mobileController.text);
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => VerificationPage(),
+        builder: (context) => VerificationPage(resetPassword: true),
       ),
     );
   }
@@ -90,7 +95,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               ),
             ),
             TextFormField(
-              initialValue: '',
+              initialValue: mobile,
+              controller: mobileController,
               textAlign: TextAlign.center,
               decoration: InputDecoration(
                 hintText: 'Enter mobile number',

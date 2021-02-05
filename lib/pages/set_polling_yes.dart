@@ -5,6 +5,8 @@ import 'package:ollie_photo_social/components/bottom_next.dart';
 import 'package:ollie_photo_social/components/responsive_scaffold.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/components/polling_back_icon.dart';
+import 'package:ollie_photo_social/model/polling.dart';
+import 'package:ollie_photo_social/module/request.dart';
 import 'package:ollie_photo_social/pages/share.dart';
 
 class SetPollingYesPage extends StatefulWidget {
@@ -28,6 +30,8 @@ class SetPollingYesPage extends StatefulWidget {
 class _SetPollingYesPageState extends State<SetPollingYesPage> {
   String dropdownValue = '1 hour';
   PageController _controller;
+  String title;
+  bool titleError = false;
 
   @override
   void initState() {
@@ -36,10 +40,22 @@ class _SetPollingYesPageState extends State<SetPollingYesPage> {
   }
 
   void nextAction() {
+    if (title == null || title.isEmpty) {
+      return setState(() => titleError = true);
+    }
+    Map data = {
+      'fields': {
+        'title': title,
+        'duration': dropdownValue,
+      },
+      'files': {
+        'yes_image': widget.photosPath,
+      }
+    };
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SharePage(),
+        builder: (context) => SharePage(type: PollingType.yes_no, data: data),
       ),
     );
   }
@@ -106,19 +122,14 @@ class _SetPollingYesPageState extends State<SetPollingYesPage> {
                         SizedBox(height: appPadding / 4),
                         TextField(
                           textAlign: TextAlign.left,
-                          decoration: new InputDecoration(
-                              hintText: 'Write your question here',
-                              border: new OutlineInputBorder(
-                                borderRadius: const BorderRadius.all(
-                                  const Radius.circular(8),
-                                ),
-                                borderSide: new BorderSide(
-                                  color: primaryColor,
-                                  width: 1.0,
-                                ),
-                              ),
-                              fillColor: white,
-                              filled: true),
+                          onChanged: (text) => setState(() {
+                            title = text;
+                            if (text != null && text.isNotEmpty)
+                              titleError = false;
+                          }),
+                          decoration: inputDecoration(
+                              'Write your question here',
+                              titleError ? 'Title is required' : null),
                         ),
                         SizedBox(height: appPadding),
                         Text('Polling Duration',

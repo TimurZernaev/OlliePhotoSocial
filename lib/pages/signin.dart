@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/components/block_raised_button.dart';
 import 'package:ollie_photo_social/components/responsive_scaffold.dart';
 import 'package:ollie_photo_social/constants.dart';
+import 'package:ollie_photo_social/module/request.dart';
+import 'package:ollie_photo_social/module/storage.dart';
 import 'package:ollie_photo_social/pages/admin/home.dart';
 import 'package:ollie_photo_social/pages/home.dart';
 import 'package:ollie_photo_social/pages/signup.dart';
@@ -19,6 +21,7 @@ class SigninPage extends StatefulWidget {
 
 class _SigninPageState extends State<SigninPage> {
   String username = '', password = '';
+  bool loading = false;
 
   void goSignUp() {
     Navigator.push(
@@ -38,12 +41,30 @@ class _SigninPageState extends State<SigninPage> {
     );
   }
 
-  void runSignin() {
+  void runSignin() async {
+    setState(() {
+      loading = true;
+    });
+    Map res = await $post('/signin', {'name': username, 'password': password});
+    setState(() {
+      loading = false;
+    });
+    if (res['status'] != 200) {
+      return print(res['message']);
+    }
+    var data = res['data'];
+    var _user = data['logged_in_user'];
+    await AppStorage.setToken(data['token']);
+    await AppStorage.setUsername(_user['name']);
+    await AppStorage.setAvatar(_user['avatar']);
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) =>
-            (username == 'admin') ? AdminHomePage() : HomePage(),
+            (res['data']['admin'] != null && res['data']['admin'])
+                ? AdminHomePage()
+                : HomePage(),
       ),
     );
   }
@@ -151,6 +172,9 @@ class _SigninPageState extends State<SigninPage> {
                       color: white,
                     ),
                   ),
+                  onChanged: (text) => setState(() {
+                    password = text;
+                  }),
                   style: TextStyle(color: white),
                 ),
                 SizedBox(
@@ -204,6 +228,7 @@ class _SigninPageState extends State<SigninPage> {
               ],
             ),
           ),
+          indicator(loading),
         ],
       ),
     );

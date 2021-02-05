@@ -17,11 +17,6 @@ class _BlockUserPageState extends State<BlockUserPage> {
   List<User> users = userList;
   List<User> filteredUsers = userList;
 
-  String followerString(int follows) {
-    int kFollows = (follows / 1000).round();
-    return (kFollows > 0) ? "${kFollows}k Followers" : "$follows Followers";
-  }
-
   void blockUser(index) {
     setState(() {
       bool blk = filteredUsers[index].blocked == null
@@ -78,7 +73,7 @@ class _BlockUserPageState extends State<BlockUserPage> {
                       ),
                       SizedBox(height: appPadding / 4),
                       Text(
-                        followerString(13008 /* user.followers */),
+                        followerString(user.followers),
                         style: TextStyle(
                             color: Colors.grey.shade500, fontSize: 16),
                       ),
@@ -150,7 +145,7 @@ class _BlockUserPageState extends State<BlockUserPage> {
               borderRadius: BorderRadius.circular(15),
               child: Image(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/images/avatar/' + user.imageUrl),
+                image: AssetImage('assets/images/avatar/' + user.avatar),
               ),
             ),
           ),

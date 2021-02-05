@@ -22,7 +22,7 @@ class _YesNoDetailCardState extends State<YesNoDetailCard> {
 
   List<Widget> _buildCarousel(Size size) {
     return List.generate(
-        widget.data.imageUrls.length, (index) => _buildPage(size, index));
+        widget.data.images.length, (index) => _buildPage(size, index));
   }
 
   Widget _buildPage(Size size, int idx) {
@@ -30,7 +30,7 @@ class _YesNoDetailCardState extends State<YesNoDetailCard> {
       borderRadius: BorderRadius.circular(10),
       child: Image(
         fit: BoxFit.cover,
-        image: AssetImage('assets/images/data/' + widget.data.imageUrls[idx]),
+        image: AssetImage('assets/images/data/' + widget.data.images[idx]),
       ),
     );
   }
@@ -142,7 +142,7 @@ class _YesNoDetailCardState extends State<YesNoDetailCard> {
             dotSelectedSize: 8,
             dotSpacing: 12,
             controller: _controller,
-            itemCount: widget.data.imageUrls.length,
+            itemCount: widget.data.images.length,
             orientation: Axis.horizontal,
           ),
           SizedBox(height: appPadding),

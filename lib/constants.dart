@@ -1,4 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:ollie_photo_social/pages/user_detail.dart';
+
+import 'model/user.dart';
 
 //colors used in this app
 
@@ -20,22 +24,70 @@ const Color gray2Color = Color.fromRGBO(228, 228, 228, 1.0);
 const Color gray3Color = Color.fromRGBO(144, 144, 144, 1.0);
 const Color redColor = Color.fromRGBO(223, 96, 114, 1.0);
 const Color yellowColor = Color.fromRGBO(255, 206, 101, 1.0);
+const String endpoint = 'http://10.10.10.130:8000/api';
+const String polling_base = 'http://10.10.10.130:8000/polling';
+const String avatar_base = 'http://10.10.10.130:8000/avatar';
 
-InputDecoration inputDecoration(String hintText) => InputDecoration(
-    hintText: hintText,
-    border: OutlineInputBorder(
-      borderRadius: const BorderRadius.all(
-        const Radius.circular(8),
-      ),
-      /* borderSide: BorderSide(
+InputDecoration inputDecoration(String hintText, [String errorText = null]) =>
+    InputDecoration(
+      hintText: hintText,
+      border: OutlineInputBorder(
+        borderRadius: const BorderRadius.all(
+          const Radius.circular(8),
+        ),
+        /* borderSide: BorderSide(
         color: primaryColor,
         width: 1.0,
       ), */
+      ),
+      contentPadding: EdgeInsets.symmetric(
+          horizontal: appPadding * 2 / 3, vertical: appPadding / 4),
+      fillColor: white,
+      filled: true,
+      errorText: errorText,
+    );
+
+Widget indicator([bool show]) {
+  return show != null && show
+      ? Container(
+          color: Color(0x99000000),
+          child: Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(yellowColor),
+              strokeWidth: 6,
+            ),
+          ),
+        )
+      : SizedBox();
+}
+
+List<String> parseToList(String json) {
+  return List<String>.from(jsonDecode(json));
+}
+
+ImageProvider getAvatar(String avatar) {
+  return avatar == null
+      ? AssetImage("assets/images/avatar/placeholder.png")
+      : Image.network('$avatar_base/$avatar').image;
+}
+
+String followerString(int follows) {
+  int kFollows = (follows / 1000).round();
+  return (kFollows > 0) ? "${kFollows}k Followers" : "$follows Followers";
+}
+
+String unit1000(int amount) {
+  int kAmount = (amount / 1000).round();
+  return (kAmount > 0) ? "$kAmount" : "$amount";
+}
+
+void goUserDetailPage(BuildContext context, User user) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => UserDetailPage(user: user),
     ),
-    contentPadding: EdgeInsets.symmetric(
-        horizontal: appPadding * 2 / 3, vertical: appPadding / 4),
-    fillColor: white,
-    filled: true);
-//default app padding
+  );
+}
 
 const double appPadding = 24.0;

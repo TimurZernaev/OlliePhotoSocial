@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/constants.dart';
-import 'package:ollie_photo_social/mock_data/user_data.dart';
+import 'package:ollie_photo_social/model/friend.dart';
+import 'package:ollie_photo_social/module/request.dart';
 import 'package:ollie_photo_social/pages/user_detail.dart';
 
 class UserAvatarList extends StatefulWidget {
@@ -9,21 +10,27 @@ class UserAvatarList extends StatefulWidget {
 }
 
 class _UserAvatarListState extends State<UserAvatarList> {
-  int selectedCategoryIndex = 0;
+  List<Friend> friendList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getFriendsList();
+  }
+
+  void getFriendsList() async {
+    Map res = await $get('/setting/friends', true);
+    print(res);
+    setState(() {
+      friendList = List<Friend>.from(
+        res['friends'].map((model) => Friend.fromJson(model)),
+      );
+    });
+  }
 
   Widget _buildUserAvatar(BuildContext context, int index) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedCategoryIndex = index;
-        });
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => UserDetailPage(user: userList[index]),
-          ),
-        );
-      },
+      onTap: () => goUserDetailPage(context, friendList[index].user),
       child: Container(
         padding: EdgeInsets.only(left: appPadding / 4),
         margin: EdgeInsets.only(top: index % 2 == 0 ? 30 : 0),
@@ -47,15 +54,14 @@ class _UserAvatarListState extends State<UserAvatarList> {
                         color: Colors.black,
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: AssetImage(
-                            "assets/images/avatar/" + userList[index].imageUrl,
-                          ),
+                          image: getAvatar(friendList[index].user.avatar),
                           fit: BoxFit.fitWidth,
                           alignment: Alignment.topCenter,
                         ),
                       ),
                     ),
-                    if (userList[index].online)
+                    if (friendList[index].user.online != null &&
+                        friendList[index].user.online)
                       Container(
                         margin: EdgeInsets.only(top: 50, left: 48),
                         height: 9,
@@ -69,7 +75,7 @@ class _UserAvatarListState extends State<UserAvatarList> {
                 ),
                 SizedBox(height: appPadding / 6),
                 Text(
-                  userList[index].name.split(' ')[0],
+                  friendList[index].user.name.split(' ')[0],
                   style: TextStyle(color: white),
                 )
               ],
@@ -89,7 +95,7 @@ class _UserAvatarListState extends State<UserAvatarList> {
       child: ListView.builder(
         physics: BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
-        itemCount: userList.length,
+        itemCount: friendList.length,
         itemBuilder: (context, index) {
           return _buildUserAvatar(context, index);
         },

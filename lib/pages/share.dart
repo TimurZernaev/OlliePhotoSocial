@@ -5,11 +5,15 @@ import 'package:ollie_photo_social/components/round_checkbox.dart';
 import 'package:ollie_photo_social/constants.dart';
 import 'package:ollie_photo_social/components/polling_back_icon.dart';
 import 'package:ollie_photo_social/mock_data/user_data.dart';
+import 'package:ollie_photo_social/model/polling.dart';
 import 'package:ollie_photo_social/model/user.dart';
+import 'package:ollie_photo_social/module/request.dart';
 import 'package:ollie_photo_social/pages/polling_complete.dart';
 
 class SharePage extends StatefulWidget {
-  SharePage({Key key}) : super(key: key);
+  SharePage({Key key, this.data, this.type}) : super(key: key);
+  final Map data;
+  final PollingType type;
 
   @override
   _SharePageState createState() => _SharePageState();
@@ -19,6 +23,7 @@ class _SharePageState extends State<SharePage> {
   String dropdownValue = '1 hour';
   List<User> filteredUsers = userList;
   int filterType = 0;
+  bool loading = false;
 
   Widget _buildShareUser(int index) {
     User user = filteredUsers[index];
@@ -48,9 +53,9 @@ class _SharePageState extends State<SharePage> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                        image:
-                            AssetImage("assets/images/avatar/${user.imageUrl}"),
-                        fit: BoxFit.fitWidth),
+                      image: getAvatar(user.avatar),
+                      fit: BoxFit.fitWidth,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -68,13 +73,33 @@ class _SharePageState extends State<SharePage> {
     );
   }
 
-  void nextAction() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PollingCompletePage(),
-      ),
+  void nextAction() async {
+    Map data = widget.data;
+    if (filterType == 0) data['fields']['share_to'] = 'public';
+    if (filterType == 1)
+      data['fields']['share_to'] = 'friends';
+    else {
+      data['fields']['share_to'] = ',' + filteredUsers.join(',') + ',';
+    }
+    setState(() {
+      loading = true;
+    });
+    int statusCode = await $formUpload(
+      AddPollingUrl[widget.type],
+      data['fields'],
+      data['files'],
     );
+    setState(() {
+      loading = false;
+    });
+    if (statusCode == 200)
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PollingCompletePage(),
+        ),
+      );
+    print(statusCode);
   }
 
   void filterUser(String text) {
@@ -265,7 +290,8 @@ class _SharePageState extends State<SharePage> {
           ),
           BottomNextIcon(
             nextAction: nextAction,
-          )
+          ),
+          indicator(loading),
         ],
       ),
     );

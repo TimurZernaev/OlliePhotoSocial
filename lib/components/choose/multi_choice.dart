@@ -80,20 +80,21 @@ class _MultiChoiceCardState extends State<MultiChoiceCard> {
             ),
           ),
         ),
-        Container(
-          height: 80,
-          width: 80,
-          decoration: BoxDecoration(
-            border: Border.all(
-                color: Colors.white, width: 4.0, style: BorderStyle.solid),
-            color: Colors.black,
-            shape: BoxShape.circle,
-            image: DecorationImage(
-              image: AssetImage(
-                "assets/images/avatar/" + widget.data.user.imageUrl,
+        GestureDetector(
+          onTap: () => goUserDetailPage(context, widget.data.user),
+          child: Container(
+            height: 80,
+            width: 80,
+            decoration: BoxDecoration(
+              border: Border.all(
+                  color: Colors.white, width: 4.0, style: BorderStyle.solid),
+              color: Colors.black,
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: getAvatar(widget.data.user.avatar),
+                fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
               ),
-              fit: BoxFit.cover,
-              alignment: Alignment.topCenter,
             ),
           ),
         ),

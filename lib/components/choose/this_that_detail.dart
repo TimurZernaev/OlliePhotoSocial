@@ -54,8 +54,7 @@ class _ThisThatDetailCardState extends State<ThisThatDetailCard> {
   }
 
   List<Widget> _buildCarousel(Size size, bool isThis) {
-    List images =
-        isThis ? widget.data.thisImageUrls : widget.data.thatImageUrls;
+    List images = isThis ? widget.data.this_images : widget.data.that_images;
     return List.generate(
         images.length, (index) => _buildPage(size, images[index]));
   }
@@ -82,8 +81,8 @@ class _ThisThatDetailCardState extends State<ThisThatDetailCard> {
           dotSpacing: 12,
           controller: isThis ? _thisController : _thatController,
           itemCount: isThis
-              ? widget.data.thisImageUrls.length
-              : widget.data.thatImageUrls.length,
+              ? widget.data.this_images.length
+              : widget.data.that_images.length,
           orientation: Axis.horizontal,
         ),
       ]),

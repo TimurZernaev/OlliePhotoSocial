@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ollie_photo_social/constants.dart';
-import 'package:ollie_photo_social/mock_data/user_data.dart';
+import 'package:ollie_photo_social/module/storage.dart';
 import 'package:ollie_photo_social/pages/profile.dart';
 import 'package:ollie_photo_social/pages/search.dart';
 
@@ -10,13 +10,32 @@ class HomeBanner extends StatefulWidget {
 }
 
 class _HomeBannerState extends State<HomeBanner> {
+  String avatar, name = '';
+
   void goProfilePage() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProfilePage(user: userList[1]),
+        builder: (context) => ProfilePage(),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    print('init home banner');
+    loadMyInfo();
+  }
+
+  void loadMyInfo() async {
+    var _name = await AppStorage.getUsername();
+    var _avatar = await AppStorage.getAvatar();
+    setState(() {
+      avatar = _avatar;
+      name = _name;
+    });
+    print('avatar $avatar');
   }
 
   @override
@@ -45,7 +64,7 @@ class _HomeBannerState extends State<HomeBanner> {
                     color: Colors.black,
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: AssetImage("assets/images/avatar/user1.jpeg"),
+                      image: getAvatar(avatar),
                       fit: BoxFit.fitWidth,
                     ),
                   ),

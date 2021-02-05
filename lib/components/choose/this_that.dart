@@ -44,18 +44,20 @@ class _ThisThatCardState extends State<ThisThatCard> {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  margin: EdgeInsets.only(
-                    right: 10,
-                  ),
-                  height: 32,
-                  width: 32,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: AssetImage(
-                          "assets/images/avatar/" + data.user.imageUrl),
-                      fit: BoxFit.fitWidth,
+                GestureDetector(
+                  onTap: () => goUserDetailPage(context, data.user),
+                  child: Container(
+                    margin: EdgeInsets.only(
+                      right: 10,
+                    ),
+                    height: 32,
+                    width: 32,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: getAvatar(data.user.avatar),
+                        fit: BoxFit.fitWidth,
+                      ),
                     ),
                   ),
                 ),
@@ -75,12 +77,13 @@ class _ThisThatCardState extends State<ThisThatCard> {
                           margin: EdgeInsets.only(
                             right: appPadding / 3,
                           ),
-                          child: Text(data.time),
+                          child: Text(data.end_time.split(' ').first),
                         ),
                         Image(
-                          image: AssetImage(data.isGroup
-                              ? "assets/images/icon/group.png"
-                              : "assets/images/icon/map.png"),
+                          image: AssetImage(
+                              data.is_group != null && data.is_group
+                                  ? "assets/images/icon/group.png"
+                                  : "assets/images/icon/map.png"),
                         ),
                       ],
                     )
@@ -123,8 +126,11 @@ class _ThisThatCardState extends State<ThisThatCard> {
                             width: double.infinity,
                             child: Image(
                               fit: BoxFit.cover,
-                              image: AssetImage('assets/images/data/' +
-                                  data.thisImageUrls[0]),
+                              image: Image.network(
+                                      '$polling_base/${data.this_images[0]}')
+                                  .image /* AssetImage(
+                                  'assets/images/data/' + data.this_images[0]) */
+                              ,
                             ),
                           ),
                         ),
@@ -134,8 +140,11 @@ class _ThisThatCardState extends State<ThisThatCard> {
                             width: double.infinity,
                             child: Image(
                               fit: BoxFit.cover,
-                              image: AssetImage('assets/images/data/' +
-                                  data.thatImageUrls[0]),
+                              image: Image.network(
+                                      '$polling_base/${data.that_images[0]}')
+                                  .image /* AssetImage(
+                                  'assets/images/data/' + data.that_images[0]) */
+                              ,
                             ),
                           ),
                         ),
