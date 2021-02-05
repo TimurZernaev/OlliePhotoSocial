@@ -24,9 +24,12 @@ const Color gray2Color = Color.fromRGBO(228, 228, 228, 1.0);
 const Color gray3Color = Color.fromRGBO(144, 144, 144, 1.0);
 const Color redColor = Color.fromRGBO(223, 96, 114, 1.0);
 const Color yellowColor = Color.fromRGBO(255, 206, 101, 1.0);
-const String endpoint = 'http://10.10.10.130:8000/api';
-const String polling_base = 'http://10.10.10.130:8000/polling';
-const String avatar_base = 'http://10.10.10.130:8000/avatar';
+
+// const String host = 'http://10.10.10.130:8000';
+const String host = 'https://www.olliekw.com';
+const String endpoint = '$host/api';
+const String polling_base = '$host/polling';
+const String avatar_base = '$host/avatar';
 
 InputDecoration inputDecoration(String hintText, [String errorText = null]) =>
     InputDecoration(
