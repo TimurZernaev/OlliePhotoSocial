@@ -1,30 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:ollie_photo_social/pages/signin.dart';
+import 'package:ollie_photo_social/app.dart';
 
-import 'components/animated_splash.dart';
-
-void main() {
-  runApp(OllieApp());
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
 }
 
-class OllieApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Ollie Social',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        // fontFamily: 'Gotham',
-      ),
-      debugShowCheckedModeBanner: false,
-      home: AnimatedSplash(
-        imagePath: 'assets/images/layout/splash.png',
-        home: SigninPage(),
-        // home: HomePage(title: 'Ollie Social Home'),
-        duration: 800,
-        type: AnimatedSplashType.StaticDuration,
-      ),
-    );
-  }
+void main() {
+  HttpOverrides.global = MyHttpOverrides();
+  runApp(OllieApp());
 }

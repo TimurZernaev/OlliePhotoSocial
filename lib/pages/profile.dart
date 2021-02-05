@@ -37,11 +37,11 @@ class _ProfilePageState extends State<ProfilePage> {
       print('set avatar image ${res['user']['avatar']}');
       await AppStorage.setAvatar(res['user']['avatar']);
     }
-
-    setState(() {
-      profileInfo = res;
-      user = User.fromJson(res['user']);
-    });
+    if (mounted)
+      setState(() {
+        profileInfo = res;
+        user = User.fromJson(res['user']);
+      });
   }
 
   Future<void> updateAvatar() async {
