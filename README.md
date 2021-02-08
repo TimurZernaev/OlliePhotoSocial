@@ -17,15 +17,5 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Screenshots
 
-[Splash Screen](/screenshots/01-1 Splash Screen.png?raw=true "Splash Screen"
-[Splash Screen](/screenshots/01-1 Splash Screen.png?raw=true "Splash Screen"
-[Splash Screen](/screenshots/01-1 Splash Screen.png?raw=true "Splash Screen"
-[Splash Screen](/screenshots/01-1 Splash Screen.png?raw=true "Splash Screen"
-[Splash Screen](/screenshots/01-1 Splash Screen.png?raw=true "Splash Screen"
-[Splash Screen](/screenshots/01-1 Splash Screen.png?raw=true "Splash Screen"
-[Splash Screen](/screenshots/01-1 Splash Screen.png?raw=true "Splash Screen"
-[Splash Screen](/screenshots/01-1 Splash Screen.png?raw=true "Splash Screen"
-[Splash Screen](/screenshots/01-1 Splash Screen.png?raw=true "Splash Screen"
-[Splash Screen](/screenshots/01-1 Splash Screen.png?raw=true "Splash Screen"
-[Splash Screen](/screenshots/01-1 Splash Screen.png?raw=true "Splash Screen"
+![ScreenShot](https://raw.github.com/jsec1912/OlliePhotoSocial/screenshots/01-1 Splash Screen.png)
 
